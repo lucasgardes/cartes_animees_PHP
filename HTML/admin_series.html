@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Séries</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            color: #333;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label, input, textarea {
+            display: block;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .image-entry {
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: white;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h2>Créer ou Modifier une Série</h2>
+    <form id="serieForm">
+        <input type="hidden" id="serieId">
+        <label>Nom de la série:</label>
+        <input type="text" id="name" required>
+        <label>Description:</label>
+        <textarea id="description"></textarea>
+        
+        <h3>Images et Sons</h3>
+        <div id="imagesContainer"></div>
+        <button type="button" onclick="ajouterImage()">Ajouter une image</button>
+        <button type="submit">Enregistrer la Série</button>
+    </form>
+
+    <h2>Liste des Séries</h2>
+    <ul id="seriesList"></ul>
+
+    <script>
+        document.getElementById('serieForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const id = document.getElementById('serieId').value;
+            const name = document.getElementById('name').value;
+            const description = document.getElementById('description').value;
+            const images = [];
+
+            document.querySelectorAll('.image-entry').forEach(entry => {
+                images.push({
+                    image_url: entry.querySelector('.image-url').value,
+                    son_url: entry.querySelector('.son-url').value
+                });
+            });
+
+            fetch('../PHP/series_api.php', {
+                method: id ? 'PUT' : 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, name, description, images })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.success || data.error);
+                location.reload();
+            });
+        });
+
+        function ajouterImage(image = {}) {
+            const div = document.createElement('div');
+            div.classList.add('image-entry');
+            div.innerHTML = `
+                <input type="hidden" class="image-id" value="${image.id || ''}">
+                <label>Image URL:</label>
+                <input type="text" class="image-url" value="${image.image_url || ''}" required>
+                <label>Son URL:</label>
+                <input type="text" class="son-url" value="${image.son_url || ''}" required>
+                <button type="button" onclick="this.parentElement.remove()">Supprimer</button>
+            `;
+            document.getElementById('imagesContainer').appendChild(div);
+        }
+
+        function chargerSeries() {
+            fetch('../PHP/series_api.php')
+                .then(response => response.json())
+                .then(series => {
+                    const list = document.getElementById('seriesList');
+                    list.innerHTML = '';
+                    series.forEach(serie => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<strong>${serie.name}</strong>: ${serie.description} 
+                            <button onclick='chargerSerie(${JSON.stringify(serie)})'>Modifier</button>`;
+                        list.appendChild(li);
+                    });
+                });
+        }
+
+        function chargerSerie(serie) {
+            document.getElementById('serieId').value = serie.id;
+            document.getElementById('name').value = serie.name;
+            document.getElementById('description').value = serie.description;
+            document.getElementById('imagesContainer').innerHTML = '';
+
+            if (serie.images) {
+                serie.images.forEach(image => ajouterImage(image));
+            }
+        }
+        chargerSeries();
+    </script>
+</body>
+</html>
