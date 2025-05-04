@@ -14,7 +14,7 @@ if (!$nom) {
 
 // ➕ Création d'une nouvelle série si pas d'ID
 if (!$serie_id) {
-    $stmt = $pdo->prepare("INSERT INTO series (nom, description) VALUES (?, ?, ?)");
+    $stmt = $pdo->prepare("INSERT INTO series (nom, description) VALUES (?, ?)");
     $stmt->execute([$nom, $description]);
     $serie_id = $pdo->lastInsertId();
 
@@ -38,7 +38,7 @@ if (isset($_FILES['images']) && isset($_FILES['sons'])) {
             move_uploaded_file($tmpImage, $imagePath);
 
             // Stockage son
-            $sonPath = 'uploads/sons/' . basename($sons['name'][$index]);
+            $sonPath = 'uploads/sounds/' . basename($sons['name'][$index]);
             move_uploaded_file($sons['tmp_name'][$index], $sonPath);
 
             // Insertion en base

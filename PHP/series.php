@@ -12,7 +12,7 @@ $stmt = $pdo->prepare("
 $stmt->execute([$_SESSION['user_id']]);
 $series = $stmt->fetchAll();
 ?>
-
+<?php include 'header.php'; ?>
 <h1>Gestion des Séries</h1>
 
 <a href="create_edit_serie.php?mode=new">➕ Ajouter une nouvelle série</a>
@@ -21,10 +21,9 @@ $series = $stmt->fetchAll();
 
 <h2>Liste des Séries</h2>
 <table border="1">
-    <tr><th>ID</th><th>Nom</th><th>Description</th><th>Actions</th></tr>
+    <tr><th>Nom</th><th>Description</th><th>Actions</th></tr>
     <?php foreach ($series as $serie): ?>
         <tr>
-            <td><?= $serie['id'] ?></td>
             <td><?= htmlspecialchars($serie['nom']) ?></td>
             <td><?= htmlspecialchars($serie['description']) ?></td>
             <td>

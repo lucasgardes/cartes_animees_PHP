@@ -5,7 +5,7 @@ require 'db.php';
 $message = '';
 
 // Récupération des infos actuelles de l'orthophoniste
-$stmt = $pdo->prepare("SELECT * FROM orthophonistes WHERE id = ?");
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->execute([$_SESSION['user_id']]);
 $user = $stmt->fetch();
 
@@ -16,7 +16,7 @@ if (isset($_POST['update'])) {
 
     // Si email changé ou mot de passe rempli, on met à jour
     if ($newEmail) {
-        $stmt = $pdo->prepare("UPDATE orthophonistes SET email = ? WHERE id = ?");
+        $stmt = $pdo->prepare("UPDATE users SET email = ? WHERE id = ?");
         $stmt->execute([$newEmail, $_SESSION['user_id']]);
         $_SESSION['user_email'] = $newEmail; // met à jour la session
         $message = "✅ Email mis à jour.";
@@ -24,13 +24,13 @@ if (isset($_POST['update'])) {
 
     if ($newPassword) {
         $hash = password_hash($newPassword, PASSWORD_BCRYPT);
-        $stmt = $pdo->prepare("UPDATE orthophonistes SET password = ? WHERE id = ?");
+        $stmt = $pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
         $stmt->execute([$hash, $_SESSION['user_id']]);
         $message .= " ✅ Mot de passe mis à jour.";
     }
 
     // Recharge les infos à jour
-    $stmt = $pdo->prepare("SELECT * FROM orthophonistes WHERE id = ?");
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
     $stmt->execute([$_SESSION['user_id']]);
     $user = $stmt->fetch();
 }
@@ -51,7 +51,7 @@ if (isset($_POST['update'])) {
     </style>
 </head>
 <body>
-
+<?php include 'header.php'; ?>
 <h1>👤 Mon Profil</h1>
 
 <div class="card">

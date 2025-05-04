@@ -41,6 +41,7 @@ if (isset($_GET['id'])) {
   </style>
 </head>
 <body>
+<?php include 'header.php'; ?>
 
 <h1><?= $serie ? 'Modifier' : 'Créer' ?> une Série</h1>
 

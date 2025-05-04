@@ -2,9 +2,8 @@
 require 'auth.php';
 require 'db.php';
 
-
 // Récupération des infos de l'orthophoniste connecté
-$stmt = $pdo->prepare("SELECT * FROM orthophonistes WHERE id = ?");
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->execute([$_SESSION['user_id']]);
 $user = $stmt->fetch();
 ?>
@@ -25,7 +24,7 @@ $user = $stmt->fetch();
     </style>
 </head>
 <body>
-
+<?php include 'header.php'; ?>
 <h1>Bienvenue <?= htmlspecialchars($user['email']) ?> 👋</h1>
 
 <div class="card">
