@@ -13,9 +13,12 @@ $stmt->execute([$_SESSION['user_id']]);
 $series = $stmt->fetchAll();
 ?>
 <?php include 'header.php'; ?>
+<link rel="stylesheet" href="../CSS/series.css">
 <h1>Gestion des Séries</h1>
 
-<a href="create_edit_serie.php?mode=new">➕ Ajouter une nouvelle série</a>
+<a href="create_edit_serie.php?mode=new" class="button-add">
+    <span class="icon">➕</span> Ajouter une nouvelle série
+</a>
 
 <hr>
 

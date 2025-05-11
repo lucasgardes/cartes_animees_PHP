@@ -29,16 +29,7 @@ if (isset($_GET['id'])) {
 <head>
   <meta charset="UTF-8">
   <title><?= $serie ? 'Modifier' : 'Créer' ?> une Série</title>
-  <style>
-      body { font-family: Arial, sans-serif; padding: 20px; }
-      .bloc { border: 1px solid #ccc; padding: 15px; margin-bottom: 15px; background-color: #f9f9f9; }
-      button { margin-top: 10px; }
-      .remove-btn { background-color: #e74c3c; color: #fff; border: none; padding: 5px 10px; cursor: pointer; }
-      .remove-btn:hover { background-color: #c0392b; }
-      .add-btn, .submit-btn { background-color: #3498db; color: #fff; border: none; padding: 10px 15px; cursor: pointer; }
-      .add-btn:hover, .submit-btn:hover { background-color: #2980b9; }
-      label { font-weight: bold; }
-  </style>
+  <link rel="stylesheet" href="../CSS/create_edit_serie.css">
 </head>
 <body>
 <?php include 'header.php'; ?>

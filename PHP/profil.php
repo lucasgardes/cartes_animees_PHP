@@ -41,14 +41,7 @@ if (isset($_POST['update'])) {
 <head>
     <meta charset="UTF-8">
     <title>Mon Profil</title>
-    <style>
-        body { font-family: Arial, sans-serif; padding: 30px; background-color: #f9f9f9; }
-        .card { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 400px; }
-        input { padding: 10px; width: 100%; margin-bottom: 15px; }
-        button { padding: 10px 15px; background-color: #3498db; color: #fff; border: none; cursor: pointer; }
-        button:hover { background-color: #2980b9; }
-        .success { color: green; margin-bottom: 15px; }
-    </style>
+    <link rel="stylesheet" href="../CSS/profil.css">
 </head>
 <body>
 <?php include 'header.php'; ?>

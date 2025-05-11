@@ -1,0 +1,57 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+th {
+    background-color: #f0f0f0;
+}
+
+h1 {
+    margin-top: 20px;
+}
+
+.btn-back {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 6px 12px;
+    background-color: #7f8c8d;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.btn-back:hover {
+    background-color: #5d6d7e;
+}
+
+.form-ajout {
+    margin-top: 30px;
+    padding: 15px;
+    background-color: #ecf0f1;
+    border-radius: 5px;
+}
+
+.form-ajout select,
+.form-ajout button {
+    padding: 8px;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.form-ajout button {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+
+.form-ajout button:hover {
+    background-color: #27ae60;
+}
