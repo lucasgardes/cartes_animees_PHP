@@ -27,23 +27,34 @@ if (!$serie_id) {
 }
 
 // 📥 Traitement des nouveaux uploads (images[] et sons[])
-if (isset($_FILES['images']) && isset($_FILES['sons'])) {
-    $images = $_FILES['images'];
+if (isset($_FILES['images_cartoon'], $_FILES['images_real'], $_FILES['sons'])) {
+    $cartoons = $_FILES['images_cartoon'];
+    $reals = $_FILES['images_real'];
     $sons = $_FILES['sons'];
     
-    foreach ($images['tmp_name'] as $index => $tmpImage) {
-        if ($tmpImage && isset($sons['tmp_name'][$index]) && $sons['tmp_name'][$index]) {
-            // Stockage image
-            $imagePath = 'uploads/images/' . basename($images['name'][$index]);
-            move_uploaded_file($tmpImage, $imagePath);
+    foreach ($cartoons['tmp_name'] as $index => $tmpCartoon) {
+        $tmpReal = $reals['tmp_name'][$index] ?? null;
+        $tmpSon = $sons['tmp_name'][$index] ?? null;
 
-            // Stockage son
+        if ($tmpCartoon && $tmpReal && $tmpSon) {
+            // ➕ Stocker image cartoon
+            $cartoonPath = 'uploads/images/' . basename($cartoons['name'][$index]);
+            move_uploaded_file($tmpCartoon, $cartoonPath);
+
+            // ➕ Stocker image réaliste
+            $realPath = 'uploads/images/' . basename($reals['name'][$index]);
+            move_uploaded_file($tmpReal, $realPath);
+
+            // ➕ Stocker son
             $sonPath = 'uploads/sounds/' . basename($sons['name'][$index]);
-            move_uploaded_file($sons['tmp_name'][$index], $sonPath);
+            move_uploaded_file($tmpSon, $sonPath);
 
-            // Insertion en base
-            $pdo->prepare("INSERT INTO animations (serie_id, image_path, son_path) VALUES (?, ?, ?)")
-                ->execute([$serie_id, $imagePath, $sonPath]);
+            // ➕ Insérer dans la table animations
+            $stmt = $pdo->prepare("
+                INSERT INTO animations (serie_id, image_cartoon, image_real, son_path)
+                VALUES (?, ?, ?, ?)
+            ");
+            $stmt->execute([$serie_id, $cartoonPath, $realPath, $sonPath]);
         }
     }
 }

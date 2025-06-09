@@ -51,7 +51,8 @@ if (isset($_GET['id'])) {
     <div id="media-container">
         <?php foreach ($animations as $anim): ?>
             <div class="bloc">
-                <p>GIF actuel : <img src="<?= $anim['image_path'] ?>" width="100"></p>
+                <p>GIF cartoon actuel : <img src="<?= $anim['image_cartoon'] ?>" width="100"></p>
+                <p>GIF réaliste actuel : <img src="<?= $anim['image_real'] ?>" width="100"></p>
                 <p>Son actuel : <audio controls src="<?= $anim['son_path'] ?>"></audio></p>
                 <input type="hidden" name="existing_animations[]" value="<?= $anim['id'] ?>">
                 <button type="button" class="remove-btn" onclick="deleteAnimation(<?= $anim['id'] ?>)">🗑 Supprimer cette animation</button>
@@ -74,10 +75,15 @@ function addMediaBloc() {
     bloc.className = 'bloc';
 
     bloc.innerHTML = `
-        <label>GIF :</label><br>
-        <input type="file" name="images[]" accept=".gif" required><br><br>
+        <label>GIF Cartoon :</label><br>
+        <input type="file" name="images_cartoon[]" accept=".gif" required><br><br>
+
+        <label>GIF Réaliste :</label><br>
+        <input type="file" name="images_real[]" accept=".gif" required><br><br>
+
         <label>Son :</label><br>
         <input type="file" name="sons[]" accept="audio/*" required><br><br>
+
         <button type="button" class="remove-btn" onclick="this.parentElement.remove()">🗑 Supprimer ce bloc</button>
     `;
 
