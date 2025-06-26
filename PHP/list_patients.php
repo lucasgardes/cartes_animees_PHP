@@ -58,6 +58,7 @@ $patients = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <th>Date de naissance</th>
                 <th>Email</th>
                 <th>Téléphone</th>
+                <th>Séries</th>
             </tr>
         </thead>
         <tbody>
@@ -70,6 +71,7 @@ $patients = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= htmlspecialchars($patient['telephone']) ?></td>
                     <td>
                         <a class="btn" href="patient_series.php?patient_id=<?= $patient['id'] ?>">Voir les séries</a>
+                        <a class="btn" href="patient_stats.php?patient_id=<?= $patient['id'] ?>">Stats</a>
                     </td>
                 </tr>
             <?php endforeach; ?>

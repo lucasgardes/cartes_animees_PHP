@@ -11,15 +11,19 @@ $user = $stmt->fetch();
 
 // Traitement de la modification
 if (isset($_POST['update'])) {
-    $newEmail = $_POST['email'] ?? '';
+    $newFirstname = $_POST['firstname'] ?? '';
+    $newLastname = $_POST['lastname'] ?? '';
     $newPassword = $_POST['password'] ?? '';
 
-    // Si email changé ou mot de passe rempli, on met à jour
-    if ($newEmail) {
-        $stmt = $pdo->prepare("UPDATE users SET email = ? WHERE id = ?");
-        $stmt->execute([$newEmail, $_SESSION['user_id']]);
-        $_SESSION['user_email'] = $newEmail; // met à jour la session
-        $message = "✅ Email mis à jour.";
+    if ($newFirstname) {
+        $stmt = $pdo->prepare("UPDATE users SET prenom = ? WHERE id = ?");
+        $stmt->execute([$newFirstname, $_SESSION['user_id']]);
+        $message = "✅ Prénom mis à jour.";
+    }
+    if ($newLastname) {
+        $stmt = $pdo->prepare("UPDATE users SET nom = ? WHERE id = ?");
+        $stmt->execute([$newLastname, $_SESSION['user_id']]);
+        $message .= "✅ Nom mis à jour.";
     }
 
     if ($newPassword) {
@@ -53,8 +57,11 @@ if (isset($_POST['update'])) {
     <?php endif; ?>
 
     <form method="post">
-        <label>Email :</label><br>
-        <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required><br>
+        <label>Nom :</label><br>
+        <input type="text" name="lastname" value="<?= htmlspecialchars($user['nom']) ?>" required><br>
+
+        <label>Prenom :</label><br>
+        <input type="text" name="firstname" value="<?= htmlspecialchars($user['prenom']) ?>" required><br>
 
         <label>Nouveau mot de passe :</label><br>
         <input type="password" name="password" placeholder="Laisser vide si inchangé"><br>

@@ -16,7 +16,8 @@ if (isset($_POST['login'])) {
     // if ($user && password_verify($password, $user['password'])) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_email'] = $user['email'];
-        header('Location: series.php');
+        $_SESSION['user_role'] = $user['role'];
+        header('Location: index.php');
         exit;
     // } else {
         // $error = "Email ou mot de passe incorrect.";
@@ -39,7 +40,7 @@ if (isset($_POST['login'])) {
 </head>
 <body>
 
-<h1>Connexion Orthophoniste</h1>
+<h1>Connexion</h1>
 
 <?php if ($error): ?>
     <p class="error"><?= $error ?></p>

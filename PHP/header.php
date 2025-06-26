@@ -1,3 +1,10 @@
+<?php
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+$role = $_SESSION['user_role'];
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -9,9 +16,16 @@
 <div class="navbar">
     <div class="nav-left">
         <a href="index.php">🏠 Accueil</a>
-        <a href="series.php">🎞️ Mes séries</a>
-        <a href="list_patients.php">🧑‍⚕️ Mes patients</a>
+
+        <a href="series.php">🎞️ Toutes les séries</a>
+        <?php if ($role === 'admin'): ?>
+            <a href="admin_dashboard.php">🛠️ Administration</a>
+            <a href="admin_users.php">Gérer les utilisateurs</a>
+        <?php else: ?>
+            <a href="list_patients.php">🧑‍⚕️ Mes patients</a>
+        <?php endif; ?>
     </div>
+
     <div class="nav-right">
         <div class="user-menu">
             <div class="user-icon" id="userIcon">👤</div>

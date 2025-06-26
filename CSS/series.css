@@ -50,3 +50,78 @@ a.link-edit {
 a.link-edit:hover {
     text-decoration: underline;
 }
+
+a.action-link {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-decoration: none;
+    margin: 2px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+a.action-link:hover {
+    transform: scale(1.05);
+}
+
+/* Bouton Modifier / Voir */
+a.edit-btn {
+    background-color: #5c6bc0;
+    color: white;
+}
+a.edit-btn:hover {
+    background-color: #3f51b5;
+}
+
+/* Bouton Supprimer */
+button.danger-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-left: 5px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+button.danger-btn:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+}
+
+/* Bouton Valider */
+a.button-validate {
+    background-color: #2ecc71;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-decoration: none;
+    margin-right: 5px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+a.button-validate:hover {
+    background-color: #27ae60;
+    transform: scale(1.05);
+}
+
+/* Bouton Rejeter */
+a.button-reject {
+    background-color: #e67e22;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+a.button-reject:hover {
+    background-color: #d35400;
+    transform: scale(1.05);
+}

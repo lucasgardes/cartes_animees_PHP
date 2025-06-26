@@ -64,6 +64,7 @@ $stmt = $pdo->prepare("
     LEFT JOIN patient_series ps ON ps.serie_id = s.id AND ps.patient_id = ?
     WHERE us.user_id = ?
     AND ps.id IS NULL
+    AND s.valid = 1
 ");
 $stmt->execute([$user_id, $patient_id]);
 $seriesDisponibles = $stmt->fetchAll(PDO::FETCH_ASSOC);

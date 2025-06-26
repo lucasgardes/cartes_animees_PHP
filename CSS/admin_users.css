@@ -1,0 +1,84 @@
+/* Gestion des utilisateurs */
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    font-size: 1em;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+button:hover {
+    background-color: #2980b9;
+    transform: scale(1.02);
+}
+
+#user-table {
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    min-height: 100px;
+}
+
+/* Table responsive si load_users.php renvoie un tableau */
+#user-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+#user-table th,
+#user-table td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+#user-table th {
+    background-color: #f9fafc;
+    color: #555;
+}
+
+@media (max-width: 600px) {
+    button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    #user-table table, 
+    #user-table thead, 
+    #user-table tbody, 
+    #user-table th, 
+    #user-table td, 
+    #user-table tr {
+        display: block;
+    }
+
+    #user-table td {
+        border: none;
+        position: relative;
+        padding-left: 50%;
+    }
+
+    #user-table td::before {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: 45%;
+        white-space: nowrap;
+        font-weight: bold;
+        color: #555;
+        content: attr(data-label);
+    }
+}
