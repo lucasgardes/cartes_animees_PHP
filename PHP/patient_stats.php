@@ -31,24 +31,7 @@ if (!$patient) {
 <head>
     <meta charset="UTF-8">
     <title>Statistiques - <?= htmlspecialchars($patient['prenom'] . ' ' . $patient['nom']) ?></title>
-    <style>
-        h2 { margin-top: 2rem; }
-        table { border-collapse: collapse; width: 100%; margin-top: 1rem; }
-        th, td { border: 1px solid #aaa; padding: 8px; text-align: left; }
-        th { background-color: #eee; }
-        .nav { margin-top: 20px; }
-        .nav a {
-            margin-right: 15px;
-            padding: 8px 12px;
-            background: #007BFF;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .nav a.active {
-            background: #0056b3;
-        }
-    </style>
+    <link rel="stylesheet" href="../CSS/patient_stats.css">
 </head>
 <body>
 

@@ -41,12 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Mot de passe oublié</title>
-    <style>
-        body { font-family: Arial, sans-serif; padding: 50px; }
-        input { padding: 10px; width: 300px; margin-bottom: 10px; }
-        button { padding: 10px 20px; background-color: #3498db; color: white; border: none; cursor: pointer; }
-        button:hover { background-color: #2980b9; }
-    </style>
+    <link rel="stylesheet" href="../CSS/forgotten_password.css">
 </head>
 <body>
 

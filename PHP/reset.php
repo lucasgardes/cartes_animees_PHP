@@ -41,14 +41,7 @@ if (!$reset) {
 <head>
     <meta charset="UTF-8">
     <title>Réinitialisation du mot de passe</title>
-    <style>
-        body { font-family: Arial, sans-serif; padding: 50px; }
-        input { padding: 10px; width: 300px; margin-bottom: 10px; }
-        button { padding: 10px 20px; background-color: #3498db; color: white; border: none; cursor: pointer; }
-        button:hover { background-color: #2980b9; }
-        .error { color: red; }
-        .success { color: green; }
-    </style>
+    <link rel="stylesheet" href="../CSS/patient_stats.css">
 </head>
 <body>
 

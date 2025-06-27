@@ -1,0 +1,17 @@
+{
+    "name": "zephi/cartes_animees_php",
+    "require": {
+        "stripe/stripe-php": "^17.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Zephi\\CartesAnimeesPhp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "lucasgardes",
+            "email": "lucas.gardes@limayrac.fr"
+        }
+    ]
+}

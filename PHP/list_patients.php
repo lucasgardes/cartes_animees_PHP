@@ -20,26 +20,7 @@ $patients = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>Mes Patients</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            padding: 10px;
-            border: 1px solid #ccc;
-        }
-
-        th {
-            background-color: #f0f0f0;
-        }
-
-        h1 {
-            margin-top: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="../CSS/list_patients.css">
 </head>
 <body>
 
@@ -72,6 +53,7 @@ $patients = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td>
                         <a class="btn" href="patient_series.php?patient_id=<?= $patient['id'] ?>">Voir les séries</a>
                         <a class="btn" href="patient_stats.php?patient_id=<?= $patient['id'] ?>">Stats</a>
+                        <a class="btn" href="patient_abonnement.php?patient_id=<?= $patient['id'] ?>">Abonnement</a>
                     </td>
                 </tr>
             <?php endforeach; ?>

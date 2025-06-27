@@ -52,13 +52,7 @@ if (isset($_POST['assign'])) {
 <head>
     <meta charset="UTF-8">
     <title>Associer une Série à un Patient</title>
-    <style>
-        body { font-family: Arial, sans-serif; padding: 30px; background-color: #f9f9f9; }
-        form { background: #fff; padding: 20px; border-radius: 8px; max-width: 500px; }
-        select, button { width: 100%; padding: 10px; margin-bottom: 15px; }
-        .success { color: green; }
-        .error { color: red; }
-    </style>
+    <link rel="stylesheet" href="../CSS/assign_serie_patient.css">
 </head>
 <body>
 
