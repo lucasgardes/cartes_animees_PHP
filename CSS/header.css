@@ -101,3 +101,21 @@
 .dropdown.show {
     display: block;
 }
+
+.lang-select {
+    margin-right: 16px;
+}
+
+.lang-dropdown {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background-color: white;
+    color: #2c3e50;
+    cursor: pointer;
+}
+
+.lang-dropdown option {
+    padding: 8px;
+}

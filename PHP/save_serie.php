@@ -113,6 +113,6 @@ if (isset($_POST['import_serie'])) {
     echo "✅ Série enregistrée avec succès.<br>";
 }
 
-echo "<a href='create_edit_serie.php?id=$serie_id'>🔙 Retour à la série</a> | ";
-echo "<a href='series.php'>📃 Retour à la liste des séries</a>";
+echo "<a href='create_edit_serie.php?id=$serie_id&lang=<?= $lang ?>'>🔙 Retour à la série</a> | ";
+echo "<a href='series.php?lang=<?= $lang ?>'>📃 Retour à la liste des séries</a>";
 ?>

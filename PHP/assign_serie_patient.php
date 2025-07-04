@@ -1,4 +1,5 @@
 <?php
+require_once 'auto_translate.php';
 require 'auth.php';
 require 'db.php';
 
@@ -27,7 +28,6 @@ if (isset($_POST['assign'])) {
     $serie_id = $_POST['serie_id'] ?? null;
 
     if ($patient_id && $serie_id) {
-        // Vérifie que la série et le patient appartiennent bien à cet orthophoniste (double sécurité)
         $check = $pdo->prepare("
             SELECT * FROM users_patients up 
             JOIN users_series us ON us.user_id = up.user_id
@@ -37,12 +37,12 @@ if (isset($_POST['assign'])) {
         if ($check->fetch()) {
             $pdo->prepare("INSERT IGNORE INTO patient_series (patient_id, serie_id) VALUES (?, ?)")
                 ->execute([$patient_id, $serie_id]);
-            $message = "✅ Série bien assignée au patient.";
+            $message = t("✅ Série bien assignée au patient.");
         } else {
-            $message = "❌ Erreur : Vous n'avez pas accès à ce patient ou cette série.";
+            $message = t("❌ Erreur : Vous n'avez pas accès à ce patient ou cette série.");
         }
     } else {
-        $message = "❌ Veuillez sélectionner un patient et une série.";
+        $message = t("❌ Veuillez sélectionner un patient et une série.");
     }
 }
 ?>
@@ -51,38 +51,38 @@ if (isset($_POST['assign'])) {
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Associer une Série à un Patient</title>
+    <title><?= t("Associer une Série à un Patient") ?></title>
     <link rel="stylesheet" href="../CSS/assign_serie_patient.css">
 </head>
 <body>
 
-<h1>🎯 Associer une Série à un Patient</h1>
+<h1>🎯 <?= t("Associer une Série à un Patient") ?></h1>
 
 <?php if ($message): ?>
     <p class="<?= strpos($message, '✅') !== false ? 'success' : 'error' ?>"><?= $message ?></p>
 <?php endif; ?>
 
 <form method="post">
-    <label>Choisir un Patient :</label>
+    <label><?= t("Choisir un Patient :") ?></label>
     <select name="patient_id" required>
-        <option value="">-- Sélectionner --</option>
+        <option value=""><?= t("-- Sélectionner --") ?></option>
         <?php foreach ($patients as $patient): ?>
             <option value="<?= $patient['id'] ?>"><?= htmlspecialchars($patient['prenom']) ?> <?= htmlspecialchars($patient['nom']) ?></option>
         <?php endforeach; ?>
     </select>
 
-    <label>Choisir une Série :</label>
+    <label><?= t("Choisir une Série :") ?></label>
     <select name="serie_id" required>
-        <option value="">-- Sélectionner --</option>
+        <option value=""><?= t("-- Sélectionner --") ?></option>
         <?php foreach ($series as $serie): ?>
             <option value="<?= $serie['id'] ?>"><?= htmlspecialchars($serie['nom']) ?></option>
         <?php endforeach; ?>
     </select>
 
-    <button type="submit" name="assign">✅ Associer</button>
+    <button type="submit" name="assign">✅ <?= t("Associer") ?></button>
 </form>
 
-<a href="index.php">⬅ Retour à l'accueil</a>
+<a href="index.php?lang=<?= $lang ?>">⬅ <?= t("Retour à l'accueil") ?></a>
 
 </body>
 </html>

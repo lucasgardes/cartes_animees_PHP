@@ -1,7 +1,8 @@
 {
     "name": "zephi/cartes_animees_php",
     "require": {
-        "stripe/stripe-php": "^17.3"
+        "stripe/stripe-php": "^17.3",
+        "guzzlehttp/guzzle": "^7.9"
     },
     "autoload": {
         "psr-4": {

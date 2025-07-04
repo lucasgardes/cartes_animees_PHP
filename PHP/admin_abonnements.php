@@ -1,12 +1,14 @@
 <?php
 require 'auth.php';
 require 'db.php';
-require 'vendor/autoload.php';
+require '../vendor/autoload.php';
+require_once 'auto_translate.php';
+require_once 'config.php';
 \Stripe\Stripe::setApiKey(STRIPE_SECRET_KEY);
 
 // Vérifie que l'utilisateur est admin
 if ($_SESSION['role'] !== 'admin') {
-    echo "⛔ Accès interdit.";
+    echo $t("⛔ Accès interdit.");
     exit;
 }
 
@@ -27,23 +29,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]
             ]);
 
-            // 2. Créer l’abonnement (avec produit Stripe pré-créé)
-            $price_id = ($req['type'] === 'annuel') ? 'price_ANN' : 'price_MENS'; // remplace avec tes ID Stripe
+            // 2. Créer l’abonnement
+            $price_id = ($req['type'] === 'annuel') ? 'price_ANN' : 'price_MENS';
             $subscription = \Stripe\Subscription::create([
                 'customer' => $customer->id,
                 'items' => [[ 'price' => $price_id ]],
-                'payment_behavior' => 'default_incomplete', // nécessite validation par lien
+                'payment_behavior' => 'default_incomplete',
                 'expand' => ['latest_invoice.payment_intent']
             ]);
 
-            // 3. Sauvegarder dans la base si besoin
             $pdo->prepare("UPDATE subscription_requests SET statut='valide', stripe_subscription_id=?, validated_at=NOW() WHERE id=?")
                 ->execute([$subscription->id, $req['id']]);
 
-            echo "<p>✅ Abonnement Stripe créé avec succès !</p>";
+            echo "<p>" . $t("Abonnement Stripe créé avec succès !") . "</p>";
 
         } catch (\Stripe\Exception\ApiErrorException $e) {
-            echo "<p>❌ Erreur Stripe : " . htmlspecialchars($e->getMessage()) . "</p>";
+            echo "<p>" . $t("Erreur Stripe") . " : " . htmlspecialchars($e->getMessage()) . "</p>";
         }
     } elseif ($action === 'refuser') {
         $pdo->prepare("UPDATE subscription_requests SET statut='refuse' WHERE id=?")
@@ -60,26 +61,26 @@ $stmt = $pdo->query("
 $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<h1>📥 Demandes d'abonnement en attente</h1>
+<h1><?= $t("📥 Demandes d'abonnement en attente") ?></h1>
 <table border="1" cellpadding="6">
     <tr>
-        <th>Patient</th>
-        <th>Nom</th>
-        <th>Email</th>
-        <th>Type</th>
-        <th>Action</th>
+        <th><?= $t("Patient") ?></th>
+        <th><?= $t("Nom") ?></th>
+        <th><?= $t("Email") ?></th>
+        <th><?= $t("Type") ?></th>
+        <th><?= $t("Action") ?></th>
     </tr>
     <?php foreach ($requests as $req): ?>
         <tr>
             <td><?= htmlspecialchars($req['patient_prenom'] . ' ' . $req['patient_nom']) ?></td>
             <td><?= htmlspecialchars($req['nom']) ?></td>
             <td><?= htmlspecialchars($req['email']) ?></td>
-            <td><?= htmlspecialchars($req['type']) ?></td>
+            <td><?= $t($req['type']) ?></td>
             <td>
                 <form method="post" style="display:inline;">
                     <input type="hidden" name="id" value="<?= $req['id'] ?>">
-                    <button name="action" value="valider">✅ Valider</button>
-                    <button name="action" value="refuser">❌ Refuser</button>
+                    <button name="action" value="valider">✅ <?= $t("Valider") ?></button>
+                    <button name="action" value="refuser">❌ <?= $t("Refuser") ?></button>
                 </form>
             </td>
         </tr>

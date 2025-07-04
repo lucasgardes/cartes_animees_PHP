@@ -105,7 +105,7 @@ if (isset($_GET['id'])) {
         <input type="hidden" name="import_serie"></input>
         <button type="submit" class="submit-btn">Importer la Série</button>
     <?php endif; ?>
-        <button type="button" onclick="window.location.href='series.php'">📃 Retour à la liste des séries</button>
+        <button type="button" onclick="window.location.href='series.php?lang=<?= $lang ?>'">📃 Retour à la liste des séries</button>
 </form>
 
 <script>

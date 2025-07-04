@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'db.php';
+require 'auto_translate.php';
 
 $error = '';
 if (isset($_POST['login'])) {
@@ -20,7 +21,7 @@ if (isset($_POST['login'])) {
         header('Location: index.php');
         exit;
     // } else {
-        // $error = "Email ou mot de passe incorrect.";
+        // $error = t("Email ou mot de passe incorrect.");
     // }
 }
 ?>
@@ -29,22 +30,22 @@ if (isset($_POST['login'])) {
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Connexion</title>
+    <title><?= t("Connexion") ?></title>
     <link rel="stylesheet" href="../CSS/login.css">
 </head>
 <body>
 
-<h1>Connexion</h1>
+<h1><?= t("Connexion") ?></h1>
 
 <?php if ($error): ?>
     <p class="error"><?= $error ?></p>
 <?php endif; ?>
 
 <form method="post">
-    <input type="email" name="email" placeholder="Email" required><br>
-    <input type="password" name="password" placeholder="Mot de passe" required><br>
-    <button type="submit" name="login">Se connecter</button>
-    <a href="forgotten_password.php">Mot de passe oublié ?</a>
+    <input type="email" name="email" placeholder="<?= t("Email") ?>" required><br>
+    <input type="password" name="password" placeholder="<?= t("Mot de passe") ?>" required><br>
+    <button type="submit" name="login"><?= t("Se connecter") ?></button>
+    <a href="forgotten_password.php?lang=<?= $lang ?>"><?= t("Mot de passe oublié ?") ?></a>
 </form>
 
 </body>

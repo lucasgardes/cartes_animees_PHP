@@ -59,4 +59,4 @@ if ($type === 'patient') {
     }
 }
 
-echo "<p><a href='admin_users.php'>🔙 Retour à la gestion</a></p>";
+echo "<p><a href='admin_users.php?lang=<?= $lang ?>'>🔙 Retour à la gestion</a></p>";

@@ -1,19 +1,20 @@
 <?php
 require 'auth.php';
 require 'db.php';
+require_once 'auto_translate.php';
 
 $user_id = $_SESSION['user_id'] ?? null;
 $patient_id = $_GET['patient_id'] ?? null;
 
 if (!$user_id || !$patient_id) {
-    die("Accès non autorisé.");
+    die(t("Accès non autorisé."));
 }
 
 // Vérifie que ce patient appartient bien à l'utilisateur
 $check = $pdo->prepare("SELECT 1 FROM users_patients WHERE user_id = ? AND patient_id = ?");
 $check->execute([$user_id, $patient_id]);
 if ($check->rowCount() === 0) {
-    die("Ce patient ne vous appartient pas.");
+    die(t("Ce patient ne vous appartient pas."));
 }
 
 // 🔄 Traitement du formulaire d'ajout de série
@@ -24,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['serie_id'])) {
     $stmt = $pdo->prepare("SELECT 1 FROM users_series WHERE user_id = ? AND serie_id = ?");
     $stmt->execute([$user_id, $serie_id]);
     if ($stmt->rowCount() === 0) {
-        die("Vous ne pouvez pas associer une série qui ne vous appartient pas.");
+        die(t("Vous ne pouvez pas associer une série qui ne vous appartient pas."));
     }
 
     // Vérifie si la série est déjà associée au patient
@@ -74,30 +75,30 @@ $seriesDisponibles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Séries du patient</title>
+    <title><?= t("Séries du patient") ?></title>
     <link rel="stylesheet" href="../CSS/patient_series.css">
 </head>
 <body>
 
 <?php include 'header.php'; ?>
 
-<h1>🎞️ Séries de <?= htmlspecialchars($patient['prenom'] . ' ' . $patient['nom']) ?></h1>
+<h1>🎞️ <?= t("Séries de") ?> <?= htmlspecialchars($patient['prenom'] . ' ' . $patient['nom']) ?></h1>
 
 <?php if (count($seriesAssociees) === 0): ?>
-    <p>Aucune série associée à ce patient.</p>
+    <p><?= t("Aucune série associée à ce patient.") ?></p>
 <?php else: ?>
     <table>
         <thead>
             <tr>
-                <th>Nom</th>
-                <th>Description</th>
+                <th><?= t("Nom") ?></th>
+                <th><?= t("Description") ?></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($seriesAssociees as $s): ?>
                 <tr>
                     <td>
-                        <a href="create_edit_serie.php?mode=edit&id=<?= $s['id'] ?>">
+                        <a href="create_edit_serie.php?mode=edit&id=<?= $s['id'] ?>&lang=<?= $lang ?>">
                             <?= htmlspecialchars($s['nom']) ?>
                         </a>
                     </td>
@@ -112,20 +113,20 @@ $seriesDisponibles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <div class="form-ajout">
     <?php if (count($seriesDisponibles) > 0): ?>
         <form method="POST">
-            <label for="serie_id">Associer une série :</label>
+            <label for="serie_id"><?= t("Associer une série") ?> :</label>
             <select name="serie_id" id="serie_id" required>
                 <?php foreach ($seriesDisponibles as $s): ?>
                     <option value="<?= $s['id'] ?>"><?= htmlspecialchars($s['nom']) ?></option>
                 <?php endforeach; ?>
             </select>
-            <button type="submit">Ajouter</button>
+            <button type="submit"><?= t("Ajouter") ?></button>
         </form>
     <?php else: ?>
-        <p>✅ Toutes vos séries sont déjà associées à ce patient.</p>
+        <p>✅ <?= t("Toutes vos séries sont déjà associées à ce patient.") ?></p>
     <?php endif; ?>
 </div>
 
-<a class="btn-back" href="list_patients.php">← Retour aux patients</a>
+<a class="btn-back" href="list_patients.php?lang=<?= $lang ?>">← <?= t("Retour aux patients") ?></a>
 
 </body>
 </html>

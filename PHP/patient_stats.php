@@ -1,6 +1,7 @@
 <?php
 require 'auth.php';
 require 'db.php';
+require_once 'auto_translate.php';
 
 $patient_id = $_GET['patient_id'] ?? null;
 $user_id = $_SESSION['user_id'] ?? null;
@@ -21,7 +22,7 @@ $stmt->execute([$patient_id, $user_id]);
 $patient = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$patient) {
-    echo "<p>⚠️ Accès non autorisé à ce patient.</p>";
+    echo "<p>" . t("⚠️ Accès non autorisé à ce patient.") . "</p>";
     exit;
 }
 ?>
@@ -30,18 +31,18 @@ if (!$patient) {
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Statistiques - <?= htmlspecialchars($patient['prenom'] . ' ' . $patient['nom']) ?></title>
+    <title><?= t("Statistiques") ?> - <?= htmlspecialchars($patient['prenom'] . ' ' . $patient['nom']) ?></title>
     <link rel="stylesheet" href="../CSS/patient_stats.css">
 </head>
 <body>
 
 <?php include 'header.php'; ?>
 
-<h1>📊 Statistiques de <?= htmlspecialchars($patient['prenom'] . ' ' . $patient['nom']) ?></h1>
+<h1>📊 <?= t("Statistiques de") ?> <?= htmlspecialchars($patient['prenom'] . ' ' . $patient['nom']) ?></h1>
 
 <div class="nav">
-    <a href="?patient_id=<?= $patient_id ?>&view=temps" class="<?= $view === 'temps' ? 'active' : '' ?>">⏱️ Temps passé par jour</a>
-    <a href="?patient_id=<?= $patient_id ?>&view=relectures" class="<?= $view === 'relectures' ? 'active' : '' ?>">🔁 Relectures de sons</a>
+    <a href="?patient_id=<?= $patient_id ?>&view=temps&lang=<?= $lang ?>" class="<?= $view === 'temps' ? 'active' : '' ?>">⏱️ <?= t("Temps passé par jour") ?></a>
+    <a href="?patient_id=<?= $patient_id ?>&view=relectures&lang=<?= $lang ?>" class="<?= $view === 'relectures' ? 'active' : '' ?>">🔁 <?= t("Relectures de sons") ?></a>
 </div>
 
 <?php if ($view === 'temps'): ?>
@@ -71,28 +72,28 @@ if (!$patient) {
     $jours = $stmt->fetchAll(PDO::FETCH_ASSOC);
     ?>
 
-    <h2>⏱️ Temps passé par jour</h2>
+    <h2>⏱️ <?= t("Temps passé par jour") ?></h2>
 
     <form method="get" style="margin-bottom: 20px;">
         <input type="hidden" name="patient_id" value="<?= $patient_id ?>">
         <input type="hidden" name="view" value="temps">
-        <label>Date début :
+        <label><?= t("Date début") ?> :
             <input type="date" name="start" value="<?= htmlspecialchars($start) ?>">
         </label>
-        <label>Date fin :
+        <label><?= t("Date fin") ?> :
             <input type="date" name="end" value="<?= htmlspecialchars($end) ?>">
         </label>
-        <button type="submit">Filtrer</button>
+        <button type="submit"><?= t("Filtrer") ?></button>
     </form>
 
     <?php if (empty($jours)): ?>
-        <p>Aucune session trouvée pour cette période.</p>
+        <p><?= t("Aucune session trouvée pour cette période.") ?></p>
     <?php else: ?>
         <table>
             <tr>
-                <th>📅 Jour</th>
-                <th>🧭 Nombre de sessions</th>
-                <th>⏳ Temps total</th>
+                <th>📅 <?= t("Jour") ?></th>
+                <th>🧭 <?= t("Nombre de sessions") ?></th>
+                <th>⏳ <?= t("Temps total") ?></th>
             </tr>
             <?php foreach ($jours as $jour): ?>
                 <tr>
@@ -131,20 +132,20 @@ if (!$patient) {
     $seriesList = $stmt->fetchAll(PDO::FETCH_ASSOC);
     ?>
 
-    <h2>🔁 Relectures de sons</h2>
+    <h2>🔁 <?= t("Relectures de sons") ?></h2>
 
     <form method="get" style="margin-bottom: 20px;">
         <input type="hidden" name="patient_id" value="<?= $patient_id ?>">
         <input type="hidden" name="view" value="relectures">
-        <label>Date début :
+        <label><?= t("Date début") ?> :
             <input type="date" name="start" value="<?= htmlspecialchars($start) ?>">
         </label>
-        <label>Date fin :
+        <label><?= t("Date fin") ?> :
             <input type="date" name="end" value="<?= htmlspecialchars($end) ?>">
         </label>
-        <label>Série :
+        <label><?= t("Série") ?> :
             <select name="serie_id">
-                <option value="">-- Sélectionner --</option>
+                <option value="">-- <?= t("Sélectionner") ?> --</option>
                 <?php foreach ($seriesList as $s): ?>
                     <option value="<?= $s['id'] ?>" <?= $serieId == $s['id'] ? 'selected' : '' ?>>
                         <?= htmlspecialchars($s['nom']) ?>
@@ -152,7 +153,7 @@ if (!$patient) {
                 <?php endforeach; ?>
             </select>
         </label>
-        <button type="submit">Afficher</button>
+        <button type="submit"><?= t("Afficher") ?></button>
     </form>
 
     <?php if ($serieId): ?>
@@ -173,14 +174,14 @@ if (!$patient) {
         ?>
 
         <?php if (empty($replays)): ?>
-            <p>Aucune relecture pour cette série sur la période sélectionnée.</p>
+            <p><?= t("Aucune relecture pour cette série sur la période sélectionnée.") ?></p>
         <?php else: ?>
             <table>
                 <tr>
-                    <th>Image Cartoon</th>
-                    <th>Image Réelle</th>
-                    <th>Son</th>
-                    <th>Nombre de relectures</th>
+                    <th><?= t("Image Cartoon") ?></th>
+                    <th><?= t("Image Réelle") ?></th>
+                    <th><?= t("Son") ?></th>
+                    <th><?= t("Nombre de relectures") ?></th>
                 </tr>
                 <?php foreach ($replays as $row): ?>
                     <tr>
@@ -189,7 +190,7 @@ if (!$patient) {
                         <td>
                             <audio controls>
                                 <source src="<?= htmlspecialchars($row['son_path']) ?>" type="audio/mpeg">
-                                Votre navigateur ne supporte pas l’audio HTML5.
+                                <?= t("Votre navigateur ne supporte pas l’audio HTML5.") ?>
                             </audio>
                         </td>
                         <td><?= (int)$row['total_replays'] ?></td>

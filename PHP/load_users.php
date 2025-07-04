@@ -25,7 +25,7 @@ if ($type === 'patients') {
     foreach ($list as $p) {
         echo "<tr>
                 <td data-label='Nom'>
-                    <a href='user_detail.php?id=" . $p['id'] . "&type=patient'>" .
+                    <a href='user_detail.php?id=" . $p['id'] . "&type=patient&lang=<?= $lang ?>'>" .
                     htmlspecialchars($p['prenom'] . ' ' . $p['nom']) .
                     "</a>
                 </td>
@@ -58,7 +58,7 @@ if ($type === 'patients') {
     foreach ($list as $u) {
         echo "<tr>
                 <td data-label='Nom'>
-                    <a href='user_detail.php?id=" . $u['id'] . "&type=orthophoniste'>" .
+                    <a href='user_detail.php?id=" . $u['id'] . "&type=orthophoniste&lang=<?= $lang ?>'>" .
                     htmlspecialchars($u['prenom'] . ' ' . $u['nom']) .
                     "</a>
                 </td>

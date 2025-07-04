@@ -3,14 +3,14 @@ require 'auth_admin.php';
 ?>
 <?php include 'header.php'; ?>
 <link rel="stylesheet" href="../CSS/admin_users.css">
-<h1>Gestion des Utilisateurs</h1>
+<h1><?= t("Gestion des Utilisateurs") ?></h1>
 
 <div style="margin-bottom: 20px;">
-    <button onclick="loadUsers('orthophonistes')">👨‍⚕️ Orthophonistes</button>
-    <button onclick="loadUsers('patients')">🧍 Patients</button>
+    <button onclick="loadUsers('orthophonistes')">👨‍⚕️ <?= t("Orthophonistes") ?></button>
+    <button onclick="loadUsers('patients')">🧍 <?= t("Patients") ?></button>
 </div>
 
-<div id="user-table">Chargement...</div>
+<div id="user-table"><?= t("Chargement...") ?></div>
 
 <script>
 function loadUsers(type) {

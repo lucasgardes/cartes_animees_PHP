@@ -1,6 +1,7 @@
 <?php
 require 'auth.php';
 require 'db.php';
+require_once 'auto_translate.php';
 
 $user_id = $_SESSION['user_id'] ?? null;
 
@@ -19,27 +20,27 @@ $patients = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Mes Patients</title>
+    <title><?= t("Mes Patients") ?></title>
     <link rel="stylesheet" href="../CSS/list_patients.css">
 </head>
 <body>
 
 <?php include 'header.php'; ?>
 
-<h1>👨‍⚕️ Mes Patients</h1>
+<h1>👨‍⚕️ <?= t("Mes Patients") ?></h1>
 
 <?php if (count($patients) === 0): ?>
-    <p>Aucun patient associé à votre compte.</p>
+    <p><?= t("Aucun patient associé à votre compte.") ?></p>
 <?php else: ?>
     <table>
         <thead>
             <tr>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Date de naissance</th>
-                <th>Email</th>
-                <th>Téléphone</th>
-                <th>Séries</th>
+                <th><?= t("Nom") ?></th>
+                <th><?= t("Prénom") ?></th>
+                <th><?= t("Date de naissance") ?></th>
+                <th><?= t("Email") ?></th>
+                <th><?= t("Téléphone") ?></th>
+                <th><?= t("Séries") ?></th>
             </tr>
         </thead>
         <tbody>
@@ -51,9 +52,9 @@ $patients = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= htmlspecialchars($patient['email']) ?></td>
                     <td><?= htmlspecialchars($patient['telephone']) ?></td>
                     <td>
-                        <a class="btn" href="patient_series.php?patient_id=<?= $patient['id'] ?>">Voir les séries</a>
-                        <a class="btn" href="patient_stats.php?patient_id=<?= $patient['id'] ?>">Stats</a>
-                        <a class="btn" href="patient_abonnement.php?patient_id=<?= $patient['id'] ?>">Abonnement</a>
+                        <a class="btn" href="patient_series.php?patient_id=<?= $patient['id'] ?>&lang=<?= $lang ?>"><?= t("Voir les séries") ?></a>
+                        <a class="btn" href="patient_stats.php?patient_id=<?= $patient['id'] ?>&lang=<?= $lang ?>"><?= t("Stats") ?></a>
+                        <a class="btn" href="patient_abonnement.php?patient_id=<?= $patient['id'] ?>&lang=<?= $lang ?>"><?= t("Abonnement") ?></a>
                     </td>
                 </tr>
             <?php endforeach; ?>
