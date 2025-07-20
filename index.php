@@ -14,6 +14,7 @@ $user = $stmt->fetch();
     <meta charset="UTF-8">
     <title><?= t("Accueil - Mon Espace") ?></title>
     <link rel="stylesheet" href="CSS/index.css">
+    <link rel="icon" type="image/png" href="/logo.png">
 </head>
 <body>
     <?php include 'PHP/header.php'; ?>
