@@ -14,15 +14,15 @@ if (isset($_POST['login'])) {
     $user = $stmt->fetch();
 
     // Vérifie le mot de passe
-    // if ($user && password_verify($password, $user['password'])) {
+    if ($user && password_verify($password, $user['password'])) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_email'] = $user['email'];
         $_SESSION['user_role'] = $user['role'];
         header('Location: /index.php');
         exit;
-    // } else {
-        // $error = t("Email ou mot de passe incorrect.");
-    // }
+    } else {
+        $error = t("Email ou mot de passe incorrect.");
+    }
 }
 ?>
 
