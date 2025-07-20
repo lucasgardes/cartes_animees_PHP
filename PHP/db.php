@@ -1,5 +1,7 @@
 <?php
 require_once '../../config.php';
+var_dump(MAIL_USER);
+die();
 $pdo = new PDO(
     'mysql:host=localhost;dbname=u370019086_cartes_animees;charset=utf8',
     'u370019086_root',
