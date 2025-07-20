@@ -19,14 +19,14 @@ $role = $_SESSION['user_role'];
 <div class="navbar">
     <div class="nav-left">
         <a href="/index.php?lang=<?= $lang ?>">🏠 <?= t('Accueil') ?></a>
-        <a href="series.php?lang=<?= $lang ?>">🎞️ <?= t('Toutes les séries') ?></a>
+        <a href="/PHP/series.php?lang=<?= $lang ?>">🎞️ <?= t('Toutes les séries') ?></a>
 
         <?php if ($role === 'admin'): ?>
-            <a href="admin_dashboard.php?lang=<?= $lang ?>">🛠️ <?= t('Administration') ?></a>
-            <a href="admin_users.php?lang=<?= $lang ?>"><?= t('Gérer les utilisateurs') ?></a>
-            <a href="admin_abonnements.php?lang=<?= $lang ?>">📥 <?= t('Gérer les abonnements') ?></a>
+            <a href="/PHP/admin_dashboard.php?lang=<?= $lang ?>">🛠️ <?= t('Administration') ?></a>
+            <a href="/PHP/admin_users.php?lang=<?= $lang ?>"><?= t('Gérer les utilisateurs') ?></a>
+            <a href="/PHP/admin_abonnements.php?lang=<?= $lang ?>">📥 <?= t('Gérer les abonnements') ?></a>
         <?php else: ?>
-            <a href="list_patients.php?lang=<?= $lang ?>">🧑‍⚕️ <?= t('Mes patients') ?></a>
+            <a href="/PHP/list_patients.php?lang=<?= $lang ?>">🧑‍⚕️ <?= t('Mes patients') ?></a>
         <?php endif; ?>
     </div>
 
@@ -43,8 +43,8 @@ $role = $_SESSION['user_role'];
         <div class="user-menu">
             <div class="user-icon" id="userIcon">👤</div>
             <div class="dropdown" id="userDropdown">
-                <a href="profil.php?lang=<?= $lang ?>">✏️ <?= t('Modifier mon profil') ?></a>
-                <a href="logout.php?lang=<?= $lang ?>">🚪 <?= t('Se déconnecter') ?></a>
+                <a href="/PHP/profil.php?lang=<?= $lang ?>">✏️ <?= t('Modifier mon profil') ?></a>
+                <a href="/PHP/logout.php?lang=<?= $lang ?>">🚪 <?= t('Se déconnecter') ?></a>
             </div>
         </div>
     </div>
