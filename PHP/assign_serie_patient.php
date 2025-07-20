@@ -82,7 +82,7 @@ if (isset($_POST['assign'])) {
     <button type="submit" name="assign">✅ <?= t("Associer") ?></button>
 </form>
 
-<a href="index.php?lang=<?= $lang ?>">⬅ <?= t("Retour à l'accueil") ?></a>
+<a href="/index.php?lang=<?= $lang ?>">⬅ <?= t("Retour à l'accueil") ?></a>
 
 </body>
 </html>

@@ -7,6 +7,6 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 if ($_SESSION['user_role'] !== 'admin') {
-    header("Location: index.php");
+    header("Location: /index.php");
     exit();
 }

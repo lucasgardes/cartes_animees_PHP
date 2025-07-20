@@ -18,7 +18,7 @@ $role = $_SESSION['user_role'];
 <body>
 <div class="navbar">
     <div class="nav-left">
-        <a href="index.php?lang=<?= $lang ?>">🏠 <?= t('Accueil') ?></a>
+        <a href="/index.php?lang=<?= $lang ?>">🏠 <?= t('Accueil') ?></a>
         <a href="series.php?lang=<?= $lang ?>">🎞️ <?= t('Toutes les séries') ?></a>
 
         <?php if ($role === 'admin'): ?>

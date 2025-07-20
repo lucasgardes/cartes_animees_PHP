@@ -72,7 +72,7 @@ if (isset($_POST['update'])) {
 </div>
 
 <br>
-<a href="index.php?lang=<?= $lang ?>">⬅ <?= t("Retour à l'accueil") ?></a>
+<a href="/index.php?lang=<?= $lang ?>">⬅ <?= t("Retour à l'accueil") ?></a>
 
 </body>
 </html>

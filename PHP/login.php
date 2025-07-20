@@ -1,7 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 session_start();
 require 'db.php';
 require 'auto_translate.php';
@@ -21,7 +18,7 @@ if (isset($_POST['login'])) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_email'] = $user['email'];
         $_SESSION['user_role'] = $user['role'];
-        header('Location: index.php');
+        header('Location: /index.php');
         exit;
     // } else {
         // $error = t("Email ou mot de passe incorrect.");
