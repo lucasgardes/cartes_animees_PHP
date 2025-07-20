@@ -3,22 +3,26 @@ require 'auth.php';
 require 'db.php';
 require '../vendor/autoload.php';
 require_once 'auto_translate.php';
-require_once 'config.php';
+require_once '../../config.php';
 \Stripe\Stripe::setApiKey(STRIPE_SECRET_KEY);
 
-// Vérifie que l'utilisateur est admin
-if ($_SESSION['role'] !== 'admin') {
-    echo $t("⛔ Accès interdit.");
-    exit;
-}
+$message = null;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// Vérifie que l'utilisateur est admin
+if ($_SESSION['user_role'] !== 'admin') {
+    $message = "<div class='alert alert-danger mt-3'>⛔ " . t("Accès interdit.") . "</div>";
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id'];
     $action = $_POST['action'];
 
-    if ($action === 'valider') {
+    $stmt = $pdo->prepare("SELECT * FROM subscription_requests WHERE id = ?");
+    $stmt->execute([$id]);
+    $req = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$req) {
+        $message = "<div class='alert alert-danger mt-3'>⚠️ " . t("Demande non trouvée.") . "</div>";
+    } elseif ($action === 'valider') {
         try {
-            // 1. Créer le client
             $customer = \Stripe\Customer::create([
                 'email' => $req['email'],
                 'name' => $req['nom'],
@@ -29,8 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]
             ]);
 
-            // 2. Créer l’abonnement
-            $price_id = ($req['type'] === 'annuel') ? 'price_ANN' : 'price_MENS';
+            $price_id = ($req['type'] === 'annuel') ? STRIPE_PRICE_ID_ANNUEL : STRIPE_PRICE_ID_MENSUEL;
+
             $subscription = \Stripe\Subscription::create([
                 'customer' => $customer->id,
                 'items' => [[ 'price' => $price_id ]],
@@ -38,17 +42,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'expand' => ['latest_invoice.payment_intent']
             ]);
 
-            $pdo->prepare("UPDATE subscription_requests SET statut='valide', stripe_subscription_id=?, validated_at=NOW() WHERE id=?")
-                ->execute([$subscription->id, $req['id']]);
+            $pdo->prepare("UPDATE subscription_requests SET statut='valide', stripe_subscription_id=?, customer_subscription_id=?, validated_at=NOW() WHERE id=?")
+                ->execute([$subscription->id, $customer->id, $req['id']]);
 
-            echo "<p>" . $t("Abonnement Stripe créé avec succès !") . "</p>";
-
+            $message = "<div class='alert alert-success mt-3'>" . t("Abonnement Stripe créé avec succès !") . "</div>";
         } catch (\Stripe\Exception\ApiErrorException $e) {
-            echo "<p>" . $t("Erreur Stripe") . " : " . htmlspecialchars($e->getMessage()) . "</p>";
+            $message = "<div class='alert alert-danger mt-3'>" . t("Erreur Stripe") . " : " . htmlspecialchars($e->getMessage()) . "</div>";
         }
     } elseif ($action === 'refuser') {
         $pdo->prepare("UPDATE subscription_requests SET statut='refuse' WHERE id=?")
             ->execute([$id]);
+        $message = "<div class='alert alert-warning mt-3'>" . t("Demande d’abonnement refusée.") . "</div>";
     }
 }
 
@@ -60,29 +64,57 @@ $stmt = $pdo->query("
 ");
 $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title><?= t("Abonnements") ?></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<?php include 'header.php'; ?>
 
-<h1><?= $t("📥 Demandes d'abonnement en attente") ?></h1>
-<table border="1" cellpadding="6">
-    <tr>
-        <th><?= $t("Patient") ?></th>
-        <th><?= $t("Nom") ?></th>
-        <th><?= $t("Email") ?></th>
-        <th><?= $t("Type") ?></th>
-        <th><?= $t("Action") ?></th>
-    </tr>
-    <?php foreach ($requests as $req): ?>
-        <tr>
-            <td><?= htmlspecialchars($req['patient_prenom'] . ' ' . $req['patient_nom']) ?></td>
-            <td><?= htmlspecialchars($req['nom']) ?></td>
-            <td><?= htmlspecialchars($req['email']) ?></td>
-            <td><?= $t($req['type']) ?></td>
-            <td>
-                <form method="post" style="display:inline;">
-                    <input type="hidden" name="id" value="<?= $req['id'] ?>">
-                    <button name="action" value="valider">✅ <?= $t("Valider") ?></button>
-                    <button name="action" value="refuser">❌ <?= $t("Refuser") ?></button>
-                </form>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-</table>
+<div class="container mt-4">
+    <?php if (!empty($message)) echo $message; ?>
+
+    <h1 class="mb-4">📥 <?= t("Demandes d'abonnement en attente") ?></h1>
+
+    <?php if (empty($requests)): ?>
+        <div class="alert alert-info"><?= t("Aucune demande d’abonnement en attente.") ?></div>
+    <?php else: ?>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th><?= t("Patient") ?></th>
+                        <th><?= t("Nom") ?></th>
+                        <th><?= t("Email") ?></th>
+                        <th><?= t("Type") ?></th>
+                        <th><?= t("Action") ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($requests as $req): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($req['patient_prenom'] . ' ' . $req['patient_nom']) ?></td>
+                            <td><?= htmlspecialchars($req['nom']) ?></td>
+                            <td><?= htmlspecialchars($req['email']) ?></td>
+                            <td><span class="badge bg-info text-dark"><?= t($req['type']) ?></span></td>
+                            <td>
+                                <form method="post" class="d-flex gap-2">
+                                    <input type="hidden" name="id" value="<?= $req['id'] ?>">
+                                    <button name="action" value="valider" class="btn btn-success btn-sm">✅ <?= t("Valider") ?></button>
+                                    <button name="action" value="refuser" class="btn btn-danger btn-sm">❌ <?= t("Refuser") ?></button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

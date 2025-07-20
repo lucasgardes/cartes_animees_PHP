@@ -1,13 +1,5 @@
 /* admin.css */
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f6f8;
-    margin: 0;
-    padding: 20px;
-    color: #333;
-}
-
 h1, h2 {
     color: #2c3e50;
     border-left: 5px solid #3498db;
@@ -15,7 +7,7 @@ h1, h2 {
     margin-top: 40px;
 }
 
-form {
+.admin-dashboard {
     background-color: #fff;
     padding: 20px;
     margin: 20px 0;
@@ -23,10 +15,10 @@ form {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-form input[type="text"],
-form input[type="email"],
-form input[type="password"],
-form select {
+.admin-dashboard input[type="text"],
+.admin-dashboard input[type="email"],
+.admin-dashboard input[type="password"],
+.admin-dashboard select {
     display: block;
     width: 100%;
     padding: 10px;
@@ -36,7 +28,7 @@ form select {
     border-radius: 5px;
 }
 
-form input[type="submit"] {
+.admin-dashboard input[type="submit"] {
     background-color: #3498db;
     color: white;
     padding: 10px 15px;
@@ -47,7 +39,7 @@ form input[type="submit"] {
     transition: background-color 0.3s ease;
 }
 
-form input[type="submit"]:hover {
+.admin-dashboard input[type="submit"]:hover {
     background-color: #2980b9;
 }
 

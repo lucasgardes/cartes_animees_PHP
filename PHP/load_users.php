@@ -1,6 +1,7 @@
 <?php
 require 'auth_admin.php';
 require 'db.php';
+require_once 'auto_translate.php';
 
 $type = $_GET['type'] ?? 'orthophonistes';
 

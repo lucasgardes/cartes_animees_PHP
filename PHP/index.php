@@ -23,21 +23,10 @@ $user = $stmt->fetch();
             <h2><?= t("Mon Profil") ?></h2>
             <p><strong><?= t("Email") ?> :</strong> <?= htmlspecialchars($user['email']) ?></p>
         </div>
-        <div class="card">
-            <h2><?= t("Navigation") ?></h2>
-            <a href="admin_dashboard.php?lang=<?= $lang ?>"><?= t("Gérer les utilisateurs") ?></a>
-            <a href="logout.php?lang=<?= $lang ?>" class="logout">🚪 <?= t("Se déconnecter") ?></a>
-        </div>
     <?php else: ?>
         <div class="card">
             <h2><?= t("Mon Profil") ?></h2>
             <p><strong><?= t("Email") ?> :</strong> <?= htmlspecialchars($user['email']) ?></p>
-        </div>
-
-        <div class="card">
-            <h2><?= t("Navigation") ?></h2>
-            <a href="series.php?lang=<?= $lang ?>">📂 <?= t("Gérer les Séries") ?></a>
-            <a href="logout.php?lang=<?= $lang ?>" class="logout">🚪 <?= t("Se déconnecter") ?></a>
         </div>
     <?php endif; ?>
 </body>

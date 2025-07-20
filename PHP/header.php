@@ -24,6 +24,7 @@ $role = $_SESSION['user_role'];
         <?php if ($role === 'admin'): ?>
             <a href="admin_dashboard.php?lang=<?= $lang ?>">🛠️ <?= t('Administration') ?></a>
             <a href="admin_users.php?lang=<?= $lang ?>"><?= t('Gérer les utilisateurs') ?></a>
+            <a href="admin_abonnements.php?lang=<?= $lang ?>">📥 <?= t('Gérer les abonnements') ?></a>
         <?php else: ?>
             <a href="list_patients.php?lang=<?= $lang ?>">🧑‍⚕️ <?= t('Mes patients') ?></a>
         <?php endif; ?>

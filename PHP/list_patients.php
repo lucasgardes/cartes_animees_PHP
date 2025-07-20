@@ -21,46 +21,60 @@ $patients = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title><?= t("Mes Patients") ?></title>
-    <link rel="stylesheet" href="../CSS/list_patients.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-
 <?php include 'header.php'; ?>
 
-<h1>👨‍⚕️ <?= t("Mes Patients") ?></h1>
+<div class="container mt-5">
+    <h1 class="mb-4">👨‍⚕️ <?= t("Mes Patients") ?></h1>
 
-<?php if (count($patients) === 0): ?>
-    <p><?= t("Aucun patient associé à votre compte.") ?></p>
-<?php else: ?>
-    <table>
-        <thead>
-            <tr>
-                <th><?= t("Nom") ?></th>
-                <th><?= t("Prénom") ?></th>
-                <th><?= t("Date de naissance") ?></th>
-                <th><?= t("Email") ?></th>
-                <th><?= t("Téléphone") ?></th>
-                <th><?= t("Séries") ?></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($patients as $patient): ?>
-                <tr>
-                    <td><?= htmlspecialchars($patient['nom']) ?></td>
-                    <td><?= htmlspecialchars($patient['prenom']) ?></td>
-                    <td><?= htmlspecialchars($patient['date_naissance']) ?></td>
-                    <td><?= htmlspecialchars($patient['email']) ?></td>
-                    <td><?= htmlspecialchars($patient['telephone']) ?></td>
-                    <td>
-                        <a class="btn" href="patient_series.php?patient_id=<?= $patient['id'] ?>&lang=<?= $lang ?>"><?= t("Voir les séries") ?></a>
-                        <a class="btn" href="patient_stats.php?patient_id=<?= $patient['id'] ?>&lang=<?= $lang ?>"><?= t("Stats") ?></a>
-                        <a class="btn" href="patient_abonnement.php?patient_id=<?= $patient['id'] ?>&lang=<?= $lang ?>"><?= t("Abonnement") ?></a>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-<?php endif; ?>
+    <?php if ($_SESSION['user_role'] === 'ortho'): ?>
+        <div class="mb-3">
+            <a href="add_patient.php" class="btn btn-success btn-sm">
+                ➕ <?= t("Ajouter un patient") ?>
+            </a>
+        </div>
+    <?php endif; ?>
 
+    <?php if (count($patients) === 0): ?>
+        <div class="alert alert-info"><?= t("Aucun patient associé à votre compte.") ?></div>
+    <?php else: ?>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th><?= t("Nom") ?></th>
+                        <th><?= t("Prénom") ?></th>
+                        <th><?= t("Date de naissance") ?></th>
+                        <th><?= t("Email") ?></th>
+                        <th><?= t("Téléphone") ?></th>
+                        <th><?= t("Séries") ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($patients as $patient): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($patient['nom']) ?></td>
+                            <td><?= htmlspecialchars($patient['prenom']) ?></td>
+                            <td><?= htmlspecialchars($patient['date_naissance']) ?></td>
+                            <td><?= htmlspecialchars($patient['email']) ?></td>
+                            <td><?= htmlspecialchars($patient['telephone']) ?></td>
+                            <td>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a href="patient_series.php?patient_id=<?= $patient['id'] ?>&lang=<?= $lang ?>" class="btn btn-outline-primary"><?= t("📂 Séries") ?></a>
+                                    <a href="patient_stats.php?patient_id=<?= $patient['id'] ?>&lang=<?= $lang ?>" class="btn btn-outline-secondary"><?= t("📊 Stats") ?></a>
+                                    <a href="patient_abonnement.php?patient_id=<?= $patient['id'] ?>&lang=<?= $lang ?>" class="btn btn-outline-success"><?= t("💳 Abonnement") ?></a>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
