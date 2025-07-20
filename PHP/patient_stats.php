@@ -33,6 +33,7 @@ if (!$patient) {
     <meta charset="UTF-8">
     <title><?= t("Statistiques") ?> - <?= htmlspecialchars($patient['prenom'] . ' ' . $patient['nom']) ?></title>
     <link rel="stylesheet" href="../CSS/patient_stats.css">
+    <link rel="icon" type="image/png" href="/logo.png">
 </head>
 <body>
 

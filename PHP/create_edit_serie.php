@@ -37,6 +37,7 @@ if (isset($_GET['id'])) {
   <meta charset="UTF-8">
   <title><?= $serie ? 'Modifier' : 'Créer' ?> une Série</title>
   <link rel="stylesheet" href="../CSS/create_edit_serie.css">
+  <link rel="icon" type="image/png" href="/logo.png">
 </head>
 <body>
 <?php include 'header.php'; ?>

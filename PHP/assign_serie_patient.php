@@ -53,6 +53,7 @@ if (isset($_POST['assign'])) {
     <meta charset="UTF-8">
     <title><?= t("Associer une Série à un Patient") ?></title>
     <link rel="stylesheet" href="../CSS/assign_serie_patient.css">
+    <link rel="icon" type="image/png" href="/logo.png">
 </head>
 <body>
 

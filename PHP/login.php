@@ -32,6 +32,7 @@ if (isset($_POST['login'])) {
     <meta charset="UTF-8">
     <title><?= t("Connexion") ?></title>
     <link rel="stylesheet" href="../CSS/login.css">
+    <link rel="icon" type="image/png" href="/logo.png">
 </head>
 <body>
 

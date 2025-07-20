@@ -15,6 +15,7 @@ $patients = $pdo->query("SELECT * FROM patients")->fetchAll(PDO::FETCH_ASSOC);
         <meta charset="UTF-8">
         <title><?= t("Admin Dashboard") ?></title>
         <link rel="stylesheet" href="../CSS/admin_dashboard.css">
+        <link rel="icon" type="image/png" href="/logo.png">
     </head>
     <body>
         <?php include 'header.php'; ?>

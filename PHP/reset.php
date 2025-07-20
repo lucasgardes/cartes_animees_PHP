@@ -43,6 +43,7 @@ if (!$reset) {
     <meta charset="UTF-8">
     <title><?= t("Réinitialisation du mot de passe") ?></title>
     <link rel="stylesheet" href="../CSS/patient_stats.css">
+    <link rel="icon" type="image/png" href="/logo.png">
 </head>
 <body>
 

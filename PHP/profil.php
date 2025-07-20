@@ -47,6 +47,7 @@ if (isset($_POST['update'])) {
     <meta charset="UTF-8">
     <title><?= t("Mon Profil") ?></title>
     <link rel="stylesheet" href="../CSS/profil.css">
+    <link rel="icon" type="image/png" href="/logo.png">
 </head>
 <body>
 <?php include 'header.php'; ?>

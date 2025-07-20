@@ -53,6 +53,7 @@ $abonnement = $stmt->fetch(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title><?= t("Abonnement") ?> - <?= htmlspecialchars($patient['prenom'] . ' ' . $patient['nom']) ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/logo.png">
 </head>
 <body>
 <?php include 'header.php'; ?>
