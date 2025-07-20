@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt3->execute([$email, $token, $expires_at]);
 
             // Création du lien
-            $reset_link = "https://ton-site.fr/create_password.php?token=" . $token;
+            $reset_link = "https://hotpink-armadillo-416034.hostingersite.com/PHP/create_password.php?token=" . $token;
 
             $mail = new PHPMailer(true);
 

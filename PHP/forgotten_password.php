@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$email, $token, $expires]);
 
         // Lien de réinitialisation
-        $reset_link = "http://localhost/PROJETESI2/cartes_animees_PHP/PHP/reset.php?token=$token";
+        $reset_link = "https://hotpink-armadillo-416034.hostingersite.com/PHP/reset.php?token=$token";
 
         // Envoi de l'email avec PHPMailer
         $mail = new PHPMailer(true);

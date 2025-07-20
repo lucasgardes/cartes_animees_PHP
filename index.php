@@ -13,10 +13,10 @@ $user = $stmt->fetch();
 <head>
     <meta charset="UTF-8">
     <title><?= t("Accueil - Mon Espace") ?></title>
-    <link rel="stylesheet" href="../CSS/index.css">
+    <link rel="stylesheet" href="CSS/index.css">
 </head>
 <body>
-    <?php include 'header.php'; ?>
+    <?php include 'PHP/header.php'; ?>
     <h1><?= t("Bienvenue, ") . htmlspecialchars($user['prenom']) . ' ' . htmlspecialchars($user['nom']) ?> 👋</h1>
     <?php if ($user['role'] === 'admin'): ?>
         <div class="card">
