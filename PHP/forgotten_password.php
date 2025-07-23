@@ -40,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mail->Password = MAIL_MDP;                  // idem
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
+            $mail->CharSet = 'UTF-8';
 
             $mail->setFrom(MAIL_USER, 'Support');
             $mail->addAddress($email);
@@ -69,16 +70,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Réinitialisation du mot de passe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/logo.png">
 </head>
-<body>
-    <?php if (!empty($message)): ?>
-        <p><?= htmlspecialchars($message) ?></p>
-    <?php endif; ?>
+<body class="bg-light d-flex align-items-center justify-content-center vh-100">
 
-    <form method="POST" action="">
-        <label for="email"><?= t("Adresse e-mail") ?> :</label>
-        <input type="email" name="email" id="email" required>
-        <button type="submit"><?= t("Envoyer") ?></button>
-    </form>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+
+                <div class="card shadow rounded">
+                    <div class="card-body">
+                        <h3 class="card-title text-center mb-4"><?= t("Réinitialisation du mot de passe") ?></h3>
+
+                        <?php if (!empty($message)): ?>
+                            <div class="alert alert-info" role="alert">
+                                <?= htmlspecialchars($message) ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <form method="POST" action="">
+                            <div class="mb-3">
+                                <label for="email" class="form-label"><?= t("Adresse e-mail") ?></label>
+                                <input type="email" class="form-control" name="email" id="email" required>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary"><?= t("Envoyer le lien de réinitialisation") ?></button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (optionnel, pour interactions) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

@@ -42,26 +42,56 @@ if (!$reset) {
 <head>
     <meta charset="UTF-8">
     <title><?= t("Réinitialisation du mot de passe") ?></title>
-    <link rel="stylesheet" href="../CSS/patient_stats.css">
     <link rel="icon" type="image/png" href="/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-light d-flex align-items-center justify-content-center vh-100">
 
-<h1><?= t("Réinitialisation du mot de passe") ?></h1>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
 
-<?php if ($error): ?>
-    <p class="error"><?= htmlspecialchars($error) ?></p>
-<?php elseif ($success): ?>
-    <p class="success"><?= htmlspecialchars($success) ?></p>
-<?php endif; ?>
+                <div class="card shadow rounded">
+                    <div class="card-body">
+                        <h3 class="card-title text-center mb-4"><?= t("Réinitialisation du mot de passe") ?></h3>
 
-<?php if ($reset && !$success): ?>
-<form method="post">
-    <input type="password" name="password" placeholder="<?= t("Nouveau mot de passe") ?>" required><br>
-    <input type="password" name="confirm_password" placeholder="<?= t("Confirmez le mot de passe") ?>" required><br>
-    <button type="submit"><?= t("Réinitialiser") ?></button>
-</form>
-<?php endif; ?>
+                        <?php if ($error): ?>
+                            <div class="alert alert-danger" role="alert">
+                                <?= htmlspecialchars($error) ?>
+                            </div>
+                        <?php elseif ($success): ?>
+                            <div class="alert alert-success" role="alert">
+                                <?= htmlspecialchars($success) ?>
+                            </div>
+                        <?php endif; ?>
 
+                        <?php if ($reset && !$success): ?>
+                            <form method="post">
+                                <div class="mb-3">
+                                    <label for="password" class="form-label"><?= t("Nouveau mot de passe") ?></label>
+                                    <input type="password" class="form-control" name="password" id="password" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="confirm_password" class="form-label"><?= t("Confirmez le mot de passe") ?></label>
+                                    <input type="password" class="form-control" name="confirm_password" id="confirm_password" required>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary"><?= t("Réinitialiser") ?></button>
+                                </div>
+                            </form>
+                        <?php endif; ?>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (optionnel) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

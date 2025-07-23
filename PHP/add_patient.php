@@ -60,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $mail->Password = MAIL_MDP;
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                 $mail->Port = 587;
+                $mail->CharSet = 'UTF-8';
 
                 // Expéditeur et destinataire
                 $mail->setFrom(MAIL_USER, 'Votre Application');
