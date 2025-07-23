@@ -63,3 +63,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Réinitialisation du mot de passe</title>
+</head>
+<body>
+    <?php if (!empty($message)): ?>
+        <p><?= htmlspecialchars($message) ?></p>
+    <?php endif; ?>
+
+    <form method="POST" action="">
+        <label for="email"><?= t("Adresse e-mail") ?> :</label>
+        <input type="email" name="email" id="email" required>
+        <button type="submit"><?= t("Envoyer") ?></button>
+    </form>
+</body>
+</html>
