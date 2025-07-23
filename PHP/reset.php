@@ -58,11 +58,11 @@ if (!$reset) {
 
                         <?php if ($error): ?>
                             <div class="alert alert-danger" role="alert">
-                                <?= htmlspecialchars($error) ?>
+                                <?= $error ?>
                             </div>
                         <?php elseif ($success): ?>
                             <div class="alert alert-success" role="alert">
-                                <?= htmlspecialchars($success) ?>
+                                <?= $success ?>
                             </div>
                         <?php endif; ?>
 
