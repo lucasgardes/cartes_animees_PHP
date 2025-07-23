@@ -32,7 +32,8 @@ if (!$reset) {
         $stmt = $pdo->prepare("DELETE FROM password_resets WHERE email = ?");
         $stmt->execute([$reset['email']]);
 
-        $success = t("Mot de passe mis à jour avec succès. Vous pouvez maintenant vous connecter.");
+        $success = t("Mot de passe mis à jour avec succès. Vous pouvez maintenant vous connecter.") . ' <a href="/login.php">' . t("Se connecter") . '</a>';
+
     }
 }
 ?>
