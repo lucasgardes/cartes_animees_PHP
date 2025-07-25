@@ -64,7 +64,7 @@ if (isset($_POST['import_serie'])) {
 
     // ➕ Création d'une nouvelle série si pas d'ID
     if (!$serie_id) {
-        $stmt = $pdo->prepare("INSERT INTO series (nom, description, image_path) VALUES (?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO series (nom, description, image_path) VALUES (?, ?, ?)");
         $stmt->execute([$nom, $description, $image_path]);
         $serie_id = $pdo->lastInsertId();
 
