@@ -53,7 +53,7 @@ if ($_SESSION['user_role'] !== 'admin') {
         $_SESSION['message'] = "<div class='alert alert-warning mt-3'>" . t("Demande d’abonnement refusée.") . "</div>";
     }
     // Redirection pour éviter la resoumission du formulaire
-    header("Location: abonnement_requests.php");
+    header("Location: admin_abonnements.php");
     exit;
 }
 

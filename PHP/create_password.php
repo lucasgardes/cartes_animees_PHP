@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo->prepare("DELETE FROM password_resets WHERE token = ?")->execute([$token]);
 
         $_SESSION['password_reset_success'] = true;
-        $redirectUrl = "reset_password.php?token=" . urlencode($token);
+        $redirectUrl = "create_password.php?token=" . urlencode($token);
         if ($isFirstTime) {
             $redirectUrl .= "&first=1";
         }

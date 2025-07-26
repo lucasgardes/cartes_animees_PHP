@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'demande_abonn
     $stmt = $pdo->prepare("INSERT INTO subscription_requests (patient_id, user_id, nom, email, type) VALUES (?, ?, ?, ?, ?)");
     $stmt->execute([$patient_id, $user_id, $nom, $email, $type]);
     $_SESSION['abonnement_message'] = "📬 " . t("Demande d’abonnement envoyée à l’administrateur.");
-    header("Location: abonnement_patient.php?patient_id=" . urlencode($patient_id));
+    header("Location: patient_abonnement.php?patient_id=" . urlencode($patient_id));
     exit;
 }
 
