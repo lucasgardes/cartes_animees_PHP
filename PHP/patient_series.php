@@ -67,11 +67,8 @@ $stmt = $pdo->prepare("
     AND ps.id IS NULL
     AND s.valid = 1
 ");
-$stmt->execute([$user_id, $patient_id]);
+$stmt->execute([$patient_id, $user_id]);
 $seriesDisponibles = $stmt->fetchAll(PDO::FETCH_ASSOC);
-var_dump($user_id);
-var_dump($patient_id);
-die();
 ?>
 
 <!DOCTYPE html>
