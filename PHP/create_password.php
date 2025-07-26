@@ -3,8 +3,13 @@ require 'db.php';
 require_once 'auto_translate.php';
 
 $token = $_GET['token'] ?? null;
+$isFirstTime = isset($_GET['first']) && $_GET['first'] == '1';
 $errors = [];
 $success = false;
+if (isset($_SESSION['password_reset_success'])) {
+    $success = true;
+    unset($_SESSION['password_reset_success']);
+}
 
 if (!$token) {
     die("<p>⛔ " . t("Lien invalide.") . "</p>");
@@ -41,7 +46,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Suppression du token
         $pdo->prepare("DELETE FROM password_resets WHERE token = ?")->execute([$token]);
 
-        $success = true;
+        $_SESSION['password_reset_success'] = true;
+        $redirectUrl = "reset_password.php?token=" . urlencode($token);
+        if ($isFirstTime) {
+            $redirectUrl .= "&first=1";
+        }
+        header("Location: " . $redirectUrl);
+        exit;
     }
 }
 ?>
@@ -67,7 +78,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="alert alert-success">
                             ✅ <?= t("Votre mot de passe a été enregistré avec succès.") ?>
                         </div>
-                        <a href="login.php" class="btn btn-success"><?= t("Se connecter") ?></a>
+
+                        <?php if (!$isFirstTime): ?>
+                            <a href="login.php" class="btn btn-success"><?= t("Se connecter") ?></a>
+                        <?php endif; ?>
 
                     <?php else: ?>
 

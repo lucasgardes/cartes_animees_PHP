@@ -33,7 +33,6 @@ if (!$reset) {
         $stmt->execute([$reset['email']]);
 
         $success = t("Mot de passe mis à jour avec succès. Vous pouvez maintenant vous connecter.") . ' <a href="/PHP/login.php">' . t("Se connecter") . '</a>';
-
     }
 }
 ?>

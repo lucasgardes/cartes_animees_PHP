@@ -35,7 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'demande_abonn
 
     $stmt = $pdo->prepare("INSERT INTO subscription_requests (patient_id, user_id, nom, email, type) VALUES (?, ?, ?, ?, ?)");
     $stmt->execute([$patient_id, $user_id, $nom, $email, $type]);
-    $message = "📬 " . t("Demande d’abonnement envoyée à l’administrateur.");
+    $_SESSION['abonnement_message'] = "📬 " . t("Demande d’abonnement envoyée à l’administrateur.");
+    header("Location: abonnement_patient.php?patient_id=" . urlencode($patient_id));
+    exit;
 }
 
 $stmt = $pdo->prepare("
@@ -45,6 +47,14 @@ $stmt = $pdo->prepare("
 ");
 $stmt->execute([$patient_id, $user_id]);
 $abonnement = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$stmt = $pdo->prepare("
+    SELECT * FROM subscription_requests
+    WHERE patient_id = ? AND user_id = ? AND statut = 'annule'
+    ORDER BY created_at DESC
+");
+$stmt->execute([$patient_id, $user_id]);
+$abonnements_annules = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -61,8 +71,9 @@ $abonnement = $stmt->fetch(PDO::FETCH_ASSOC);
 <div class="container mt-5">
     <h1 class="mb-4">📄 <?= t("Gestion de l’abonnement pour") ?> <strong><?= htmlspecialchars($patient['prenom'] . ' ' . $patient['nom']) ?></strong></h1>
 
-    <?php if (!empty($message)): ?>
-        <div class="alert alert-success"><?= $message ?></div>
+    <?php if (isset($_SESSION['abonnement_message'])): ?>
+        <div class="alert alert-success"><?= $_SESSION['abonnement_message'] ?></div>
+        <?php unset($_SESSION['abonnement_message']); ?>
     <?php endif; ?>
 
     <?php if (!$abonnement || $abonnement['statut'] === 'annule'): ?>
@@ -110,6 +121,33 @@ $abonnement = $stmt->fetch(PDO::FETCH_ASSOC);
     <?php elseif ($abonnement['statut'] === 'refuse'): ?>
         <div class="alert alert-danger mt-3">
             ❌ <?= t("Votre dernière demande d’abonnement a été refusée par l’administrateur.") ?>
+        </div>
+    <?php endif; ?>
+    <?php if (!empty($abonnements_annules)): ?>
+        <div class="mt-5">
+            <h4>🗂️ <?= t("Historique des abonnements annulés") ?></h4>
+            <div class="table-responsive mt-3">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th><?= t("Nom") ?></th>
+                            <th><?= t("Email") ?></th>
+                            <th><?= t("Type") ?></th>
+                            <th><?= t("Date de demande") ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($abonnements_annules as $a): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($a['nom']) ?></td>
+                                <td><?= htmlspecialchars($a['email']) ?></td>
+                                <td><?= t(ucfirst($a['type'])) ?></td>
+                                <td><?= date('d/m/Y H:i', strtotime($a['created_at'])) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     <?php endif; ?>
 </div>

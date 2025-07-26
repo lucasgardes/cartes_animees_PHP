@@ -38,7 +38,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['serie_id'])) {
     }
 
     // Redirige pour éviter la resoumission du formulaire
-    header("Location: patient_series.php?patient_id=" . $patient_id);
+    header("Location: patient_series.php?patient_id=" . $patient_id . "&lang=" . urlencode($lang));
+    exit;
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_serie_id'])) {
+    $delete_serie_id = $_POST['delete_serie_id'];
+
+    // Supprimer l'association
+    $stmt = $pdo->prepare("DELETE FROM patient_series WHERE patient_id = ? AND serie_id = ?");
+    $stmt->execute([$patient_id, $delete_serie_id]);
+
+    // Redirige pour éviter la resoumission du formulaire
+    header("Location: patient_series.php?patient_id=" . $patient_id . "&lang=" . urlencode($lang));
     exit;
 }
 
@@ -93,6 +103,7 @@ $seriesDisponibles = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <tr>
                 <th><?= t("Nom") ?></th>
                 <th><?= t("Description") ?></th>
+                <th><?= t("Action") ?></th>
             </tr>
         </thead>
         <tbody>
@@ -104,6 +115,12 @@ $seriesDisponibles = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </a>
                     </td>
                     <td><?= htmlspecialchars($s['description']) ?></td>
+                    <td>
+                        <form method="POST" onsubmit="return confirm('<?= t('Êtes-vous sûr de vouloir désassocier cette série ?') ?>');">
+                            <input type="hidden" name="delete_serie_id" value="<?= $s['id'] ?>">
+                            <button type="submit"><?= t("Désassocier") ?></button>
+                        </form>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>

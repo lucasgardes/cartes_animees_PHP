@@ -6,11 +6,9 @@ require_once 'auto_translate.php';
 require_once '../../config.php';
 \Stripe\Stripe::setApiKey(STRIPE_SECRET_KEY);
 
-$message = null;
-
 // Vérifie que l'utilisateur est admin
 if ($_SESSION['user_role'] !== 'admin') {
-    $message = "<div class='alert alert-danger mt-3'>⛔ " . t("Accès interdit.") . "</div>";
+    $_SESSION['message'] = "<div class='alert alert-danger mt-3'>⛔ " . t("Accès interdit.") . "</div>";
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id'];
     $action = $_POST['action'];
@@ -20,7 +18,7 @@ if ($_SESSION['user_role'] !== 'admin') {
     $req = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$req) {
-        $message = "<div class='alert alert-danger mt-3'>⚠️ " . t("Demande non trouvée.") . "</div>";
+        $_SESSION['message'] = "<div class='alert alert-danger mt-3'>⚠️ " . t("Demande non trouvée.") . "</div>";
     } elseif ($action === 'valider') {
         try {
             $customer = \Stripe\Customer::create([
@@ -45,15 +43,18 @@ if ($_SESSION['user_role'] !== 'admin') {
             $pdo->prepare("UPDATE subscription_requests SET statut='valide', stripe_subscription_id=?, customer_subscription_id=?, validated_at=NOW() WHERE id=?")
                 ->execute([$subscription->id, $customer->id, $req['id']]);
 
-            $message = "<div class='alert alert-success mt-3'>" . t("Abonnement Stripe créé avec succès !") . "</div>";
+            $_SESSION['message'] = "<div class='alert alert-success mt-3'>" . t("Abonnement Stripe créé avec succès !") . "</div>";
         } catch (\Stripe\Exception\ApiErrorException $e) {
-            $message = "<div class='alert alert-danger mt-3'>" . t("Erreur Stripe") . " : " . htmlspecialchars($e->getMessage()) . "</div>";
+            $_SESSION['message'] = "<div class='alert alert-danger mt-3'>" . t("Erreur Stripe") . " : " . htmlspecialchars($e->getMessage()) . "</div>";
         }
     } elseif ($action === 'refuser') {
         $pdo->prepare("UPDATE subscription_requests SET statut='refuse' WHERE id=?")
             ->execute([$id]);
-        $message = "<div class='alert alert-warning mt-3'>" . t("Demande d’abonnement refusée.") . "</div>";
+        $_SESSION['message'] = "<div class='alert alert-warning mt-3'>" . t("Demande d’abonnement refusée.") . "</div>";
     }
+    // Redirection pour éviter la resoumission du formulaire
+    header("Location: abonnement_requests.php");
+    exit;
 }
 
 $stmt = $pdo->query("
@@ -76,7 +77,12 @@ $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <?php include 'header.php'; ?>
 
 <div class="container mt-4">
-    <?php if (!empty($message)) echo $message; ?>
+    <?php
+        if (isset($_SESSION['message'])) {
+            echo $_SESSION['message'];
+            unset($_SESSION['message']);
+        }
+    ?>
 
     <h1 class="mb-4">📥 <?= t("Demandes d'abonnement en attente") ?></h1>
 
