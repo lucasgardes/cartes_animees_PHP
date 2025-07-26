@@ -57,7 +57,7 @@ if ($_SESSION['user_role'] !== 'admin') {
 }
 
 $stmt = $pdo->query("
-    SELECT sr.*, p.nom AS patient_nom, p.prenom AS patient_prenom
+    SELECT sr.*
     FROM subscription_requests sr
     JOIN patients p ON p.id = sr.patient_id
     WHERE sr.statut = 'en_attente'
@@ -88,7 +88,6 @@ $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <thead class="table-dark">
                     <tr>
                         <th><?= t("Patient") ?></th>
-                        <th><?= t("Nom") ?></th>
                         <th><?= t("Email") ?></th>
                         <th><?= t("Type") ?></th>
                         <th><?= t("Action") ?></th>
@@ -97,7 +96,6 @@ $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <tbody>
                     <?php foreach ($requests as $req): ?>
                         <tr>
-                            <td><?= htmlspecialchars($req['patient_prenom'] . ' ' . $req['patient_nom']) ?></td>
                             <td><?= htmlspecialchars($req['nom']) ?></td>
                             <td><?= htmlspecialchars($req['email']) ?></td>
                             <td><span class="badge bg-info text-dark"><?= t($req['type']) ?></span></td>
