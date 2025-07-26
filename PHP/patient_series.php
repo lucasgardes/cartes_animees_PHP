@@ -69,6 +69,9 @@ $stmt = $pdo->prepare("
 ");
 $stmt->execute([$user_id, $patient_id]);
 $seriesDisponibles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+var_dump($user_id);
+var_dump($patient_id);
+die();
 ?>
 
 <!DOCTYPE html>
