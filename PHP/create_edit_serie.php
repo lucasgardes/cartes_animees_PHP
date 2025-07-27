@@ -1,6 +1,7 @@
 <?php
 require 'auth.php';
 require 'db.php';
+require_once 'auto_translate.php';
 
 $success_message = null;
 $error_message = null;
@@ -67,10 +68,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute([$user_id, $serie_id]);
             } else {
                 if ($image_path) {
-                    $stmt = $pdo->prepare("UPDATE series SET nom = ?, description = ?, image_path = ? WHERE id = ?");
+                    $stmt = $pdo->prepare("UPDATE series SET nom = ?, description = ?, image_path = ?, valid = 0, valid_date = NULL WHERE id = ?");
                     $stmt->execute([$nom, $description, $image_path, $serie_id]);
                 } else {
-                    $stmt = $pdo->prepare("UPDATE series SET nom = ?, description = ? WHERE id = ?");
+                    $stmt = $pdo->prepare("UPDATE series SET nom = ?, description = ?, valid = 0, valid_date = NULL WHERE id = ?");
                     $stmt->execute([$nom, $description, $serie_id]);
                 }
             }
