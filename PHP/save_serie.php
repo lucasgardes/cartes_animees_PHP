@@ -50,8 +50,8 @@ if (isset($_POST['import_serie'])) {
         if ($imageInfo === false) {
             die("❗ L'image principale n'est pas valide.");
         }
-        // if ($imageInfo[0] !== 150 || $imageInfo[1] !== 150) {
-        //     die("❗ L'image principale doit faire exactement 150 x 150 pixels.");
+        // if ($imageInfo[0] !== 450 || $imageInfo[1] !== 450) {
+        //     die("❗ L'image principale doit faire exactement 450 x 450 pixels.");
         // }
 
         $filename = uniqid("serie_") . "_" . basename($_FILES['image_serie']['name']);

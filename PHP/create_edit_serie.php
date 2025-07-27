@@ -73,7 +73,7 @@ if (isset($_GET['id'])) {
     
     <label>Image principale de la série :</label><br>
     <?php if (!empty($serie['image_path'])): ?>
-        <img src="<?= htmlspecialchars($serie['image_path']) ?>" alt="aperçu" style="max-width: 150px; max-height: 150px;"><br>
+        <img src="<?= htmlspecialchars($serie['image_path']) ?>" alt="aperçu" style="max-width: 450px; max-height: 450px;"><br>
     <?php endif; ?>
     <?php if ($can_edit): ?>
         <input type="file" name="image_serie" id="imageSerieInput" accept="image/*"><br><br>
@@ -146,8 +146,8 @@ function bindNewValidationEvents() {
 
             const img = new Image();
             img.onload = function () {
-                if (img.width !== 150 || img.height !== 150) {
-                    alert("❗ L'image principale doit faire exactement 150 x 150 pixels.");
+                if (img.width !== 450 || img.height !== 450) {
+                    alert("❗ L'image principale doit faire exactement 450 x 450 pixels.");
                     imageInput.value = "";
                 }
             };
@@ -167,8 +167,8 @@ function bindNewValidationEvents() {
 
             const img = new Image();
             img.onload = function () {
-                if (img.width !== 150 || img.height !== 150) {
-                    alert("❗ Le GIF cartoon doit faire exactement 150 x 150 pixels.");
+                if (img.width !== 450 || img.height !== 450) {
+                    alert("❗ Le GIF cartoon doit faire exactement 450 x 450 pixels.");
                     input.value = "";
                 }
             };
