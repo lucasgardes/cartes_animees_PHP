@@ -2,6 +2,112 @@
 require 'auth.php';
 require 'db.php';
 
+$success_message = null;
+$error_message = null;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
+        $user_id = $_SESSION['user_id'] ?? null;
+        $nom = $_POST['nom'] ?? null;
+        $description = $_POST['description'] ?? null;
+        $serie_id = $_POST['serie_id'] ?? null;
+
+        if (isset($_POST['import_serie'])) {
+            $stmt = $pdo->prepare("SELECT * FROM animations WHERE serie_id = ?");
+            $stmt->execute([$serie_id]);
+            $animations = $stmt->fetchAll();
+
+            $stmt = $pdo->prepare("SELECT image_path FROM series WHERE id = ?");
+            $stmt->execute([$serie_id]);
+            $image_data = $stmt->fetch();
+            $image_path = $image_data['image_path'] ?? null;
+
+            $stmt = $pdo->prepare("INSERT INTO series (nom, description, image_path) VALUES (?, ?, ?)");
+            $stmt->execute([$nom, $description, $image_path]);
+            $serie_id = $pdo->lastInsertId();
+
+            $stmt = $pdo->prepare("INSERT INTO animations (serie_id, image_real, image_cartoon, son_path) VALUES (?, ?, ?, ?)");
+            foreach ($animations as $anim) {
+                $stmt->execute([
+                    $serie_id,
+                    $anim['image_real'],
+                    $anim['image_cartoon'],
+                    $anim['son_path']
+                ]);
+            }
+
+            $stmt = $pdo->prepare("INSERT INTO users_series (user_id, serie_id) VALUES (?, ?)");
+            $stmt->execute([$user_id, $serie_id]);
+        } else {
+            if (!$nom) {
+                throw new Exception("Le nom de la série est obligatoire.");
+            }
+
+            $image_path = null;
+            if (isset($_FILES['image_serie']) && $_FILES['image_serie']['error'] === UPLOAD_ERR_OK) {
+                $allowed_types = ['image/gif', 'image/png', 'image/jpeg'];
+                if (!in_array($_FILES['image_serie']['type'], $allowed_types)) {
+                    throw new Exception("Seuls les formats GIF, PNG ou JPEG sont autorisés.");
+                }
+                $imageInfo = getimagesize($_FILES['image_serie']['tmp_name']);
+                if ($imageInfo === false) {
+                    throw new Exception("L'image principale n'est pas valide.");
+                }
+                $filename = uniqid("serie_") . "_" . basename($_FILES['image_serie']['name']);
+                $image_path = "uploads/images/" . $filename;
+                move_uploaded_file($_FILES['image_serie']['tmp_name'], $image_path);
+            }
+
+            if (!$serie_id) {
+                $stmt = $pdo->prepare("INSERT INTO series (nom, description, image_path) VALUES (?, ?, ?)");
+                $stmt->execute([$nom, $description, $image_path]);
+                $serie_id = $pdo->lastInsertId();
+
+                $stmt = $pdo->prepare("INSERT INTO users_series (user_id, serie_id) VALUES (?, ?)");
+                $stmt->execute([$user_id, $serie_id]);
+            } else {
+                if ($image_path) {
+                    $stmt = $pdo->prepare("UPDATE series SET nom = ?, description = ?, image_path = ? WHERE id = ?");
+                    $stmt->execute([$nom, $description, $image_path, $serie_id]);
+                } else {
+                    $stmt = $pdo->prepare("UPDATE series SET nom = ?, description = ? WHERE id = ?");
+                    $stmt->execute([$nom, $description, $serie_id]);
+                }
+            }
+
+            if (isset($_FILES['images_cartoon'], $_FILES['images_real'], $_FILES['sons'])) {
+                $cartoons = $_FILES['images_cartoon'];
+                $reals = $_FILES['images_real'];
+                $sons = $_FILES['sons'];
+
+                foreach ($cartoons['tmp_name'] as $index => $tmpCartoon) {
+                    $tmpReal = $reals['tmp_name'][$index] ?? null;
+                    $tmpSon = $sons['tmp_name'][$index] ?? null;
+
+                    if ($tmpCartoon && $tmpReal && $tmpSon) {
+                        $cartoonPath = 'uploads/images/' . basename($cartoons['name'][$index]);
+                        move_uploaded_file($tmpCartoon, $cartoonPath);
+
+                        $realPath = 'uploads/images/' . basename($reals['name'][$index]);
+                        move_uploaded_file($tmpReal, $realPath);
+
+                        $sonPath = 'uploads/sounds/' . basename($sons['name'][$index]);
+                        move_uploaded_file($tmpSon, $sonPath);
+
+                        $stmt = $pdo->prepare("INSERT INTO animations (serie_id, image_cartoon, image_real, son_path) VALUES (?, ?, ?, ?)");
+                        $stmt->execute([$serie_id, $cartoonPath, $realPath, $sonPath]);
+                    }
+                }
+            }
+        }
+
+        header("Location: create_edit_serie.php?id=$serie_id&lang=$lang&success=1");
+        exit;
+    } catch (Exception $e) {
+        $error_message = $e->getMessage();
+    }
+}
+
 // Si modification => on récupère la série + ses animations
 $serie = null;
 $animations = [];
@@ -41,6 +147,11 @@ if (isset($_GET['id'])) {
 </head>
 <body>
 <?php include 'header.php'; ?>
+<?php if (isset($_GET['success'])): ?>
+    <div class="message-success">✅ Série enregistrée avec succès.</div>
+<?php elseif (!empty($error_message)): ?>
+    <div class="message-error">❗ <?= htmlspecialchars($error_message) ?></div>
+<?php endif; ?>
 
 <?php if ($can_edit): ?>
     <h1><?= $serie ? 'Modifier' : 'Créer' ?> une Série</h1>
@@ -60,7 +171,7 @@ if (isset($_GET['id'])) {
     <?php endif; ?>
 <?php endif; ?>
 
-<form method="post" action="save_serie.php" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data">
     <?php if ($serie): ?>
         <input type="hidden" name="serie_id" value="<?= $serie['id'] ?>">
     <?php endif; ?>
@@ -130,6 +241,9 @@ function addMediaBloc() {
 
     container.appendChild(bloc);
     bindNewValidationEvents();
+
+    const addButton = document.querySelector('.add-btn');
+    container.parentElement.appendChild(addButton);
 }
 
 function deleteAnimation(id) {
