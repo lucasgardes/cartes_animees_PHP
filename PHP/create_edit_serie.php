@@ -6,6 +6,10 @@ require_once 'auto_translate.php';
 $success_message = null;
 $error_message = null;
 
+$settings = $pdo->query("SELECT `key`, `value` FROM settings")->fetchAll(PDO::FETCH_KEY_PAIR);
+$image_width = $settings['image_width'];
+$image_height = $settings['image_height'];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $user_id = $_SESSION['user_id'] ?? null;
@@ -68,8 +72,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute([$user_id, $serie_id]);
             } else {
                 if ($image_path) {
+                    // Récupérer l'ancienne image avant mise à jour
+                    $stmt = $pdo->prepare("SELECT image_path FROM series WHERE id = ?");
+                    $stmt->execute([$serie_id]);
+                    $oldImagePath = $stmt->fetchColumn();
+
+                    // Mettre à jour la série avec la nouvelle image
                     $stmt = $pdo->prepare("UPDATE series SET nom = ?, description = ?, image_path = ?, valid = 0, valid_date = NULL WHERE id = ?");
                     $stmt->execute([$nom, $description, $image_path, $serie_id]);
+
+                    // Supprimer l'ancienne image si elle n'est pas utilisée ailleurs
+                    if ($oldImagePath && $oldImagePath !== $image_path) {
+                        $stmt = $pdo->prepare("SELECT COUNT(*) FROM series WHERE image_path = ?");
+                        $stmt->execute([$oldImagePath]);
+                        $count = $stmt->fetchColumn();
+                        if ($count == 0 && file_exists($oldImagePath)) {
+                            unlink($oldImagePath);
+                        }
+                    }
                 } else {
                     $stmt = $pdo->prepare("UPDATE series SET nom = ?, description = ?, valid = 0, valid_date = NULL WHERE id = ?");
                     $stmt->execute([$nom, $description, $serie_id]);
@@ -185,7 +205,7 @@ if (isset($_GET['id'])) {
     
     <label>Image principale de la série :</label><br>
     <?php if (!empty($serie['image_path'])): ?>
-        <img src="<?= htmlspecialchars($serie['image_path']) ?>" alt="aperçu" style="max-width: 450px; max-height: 450px;"><br>
+        <img src="<?= htmlspecialchars($serie['image_path']) ?>" alt="aperçu" style="max-width: <?= $image_width ?>px; max-height: <?= $image_height ?>px;"><br>
     <?php endif; ?>
     <?php if ($can_edit): ?>
         <input type="file" name="image_serie" id="imageSerieInput" accept="image/*"><br><br>
@@ -222,6 +242,9 @@ if (isset($_GET['id'])) {
 </form>
 
 <script>
+const requiredWidth = <?= (int)$image_width ?>;
+const requiredHeight = <?= (int)$image_height ?>;
+const requiredDuration = <?= (float)$settings['sound_duration'] ?>;
 function addMediaBloc() {
     const container = document.getElementById('new-media');
     const bloc = document.createElement('div');
@@ -261,8 +284,8 @@ function bindNewValidationEvents() {
 
             const img = new Image();
             img.onload = function () {
-                if (img.width !== 450 || img.height !== 450) {
-                    alert("❗ L'image principale doit faire exactement 450 x 450 pixels.");
+                if (img.width !== requiredWidth || img.height !== requiredHeight) {
+                    alert(`❗ L'image doit faire exactement ${requiredWidth} x ${requiredHeight} pixels.`);
                     imageInput.value = "";
                 }
             };
@@ -282,8 +305,8 @@ function bindNewValidationEvents() {
 
             const img = new Image();
             img.onload = function () {
-                if (img.width !== 450 || img.height !== 450) {
-                    alert("❗ Le GIF cartoon doit faire exactement 450 x 450 pixels.");
+                if (img.width !== requiredWidth || img.height !== requiredHeight) {
+                    alert(`❗ Le GIF doit faire exactement ${requiredWidth} x ${requiredHeight} pixels.`);
                     input.value = "";
                 }
             };
@@ -306,8 +329,8 @@ function bindNewValidationEvents() {
             audio.onloadedmetadata = function () {
                 window.URL.revokeObjectURL(audio.src);
                 const duration = audio.duration;
-                if (Math.abs(duration - 5) > 0.1) {
-                    alert("❗ Le son doit durer exactement 5 secondes.");
+                if (Math.abs(duration - requiredDuration) > 0.1) {
+                    alert(`❗ Le son doit durer exactement ${requiredDuration} secondes.`);
                     input.value = "";
                 }
             };
