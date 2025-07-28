@@ -34,7 +34,7 @@ foreach ($stmt->fetchAll() as $row) {
 <head>
   <meta charset="UTF-8">
   <title>Paramètres globaux</title>
-  <link rel="stylesheet" href="../CSS/admin.css">
+  <link rel="icon" type="image/png" href="/logo.png">
 </head>
 <body>
 <?php include 'header.php'; ?>
