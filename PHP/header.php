@@ -26,7 +26,7 @@ $role = $_SESSION['user_role'];
             <a href="/PHP/admin_dashboard.php?lang=<?= $lang ?>">🛠️ <?= t('Administration') ?></a>
             <a href="/PHP/admin_users.php?lang=<?= $lang ?>"><?= t('Gérer les utilisateurs') ?></a>
             <a href="/PHP/admin_abonnements.php?lang=<?= $lang ?>">📥 <?= t('Gérer les abonnements') ?></a>
-            <a href="/PHP/settings.php?lang=<?= $lang ?>">📥 <?= t('Gérer les paramètres') ?></a>
+            <a href="/PHP/settings.php?lang=<?= $lang ?>">⚙️ <?= t('Gérer les paramètres') ?></a>
         <?php else: ?>
             <a href="/PHP/list_patients.php?lang=<?= $lang ?>">🧑‍⚕️ <?= t('Mes patients') ?></a>
         <?php endif; ?>
