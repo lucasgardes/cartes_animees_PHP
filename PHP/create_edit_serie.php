@@ -248,7 +248,7 @@ function addMediaBloc() {
 }
 
 function deleteAnimation(id) {
-    if (confirm("Supprimer définitivement cette animation ?")) {
+    if (confirm("Supprimer définitivement cette animation ? Cela supprimera aussi les statistiques des patients associées à cette série.")) {
         window.location.href = "delete_animation.php?id=" + id + "&serie=<?= $serie['id'] ?? '' ?>";
     }
 }

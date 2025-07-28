@@ -94,7 +94,7 @@ $series = $stmt->fetchAll();
                     $linkedToPatient = $stmtCheck->fetchColumn();
 
                     if ($linkedToPatient == 0): ?>
-                        <form action="delete_serie.php" method="post" style="display:inline;" onsubmit="return confirm('<?= t("Supprimer définitivement cette série ?") ?>')">
+                        <form action="delete_serie.php" method="post" style="display:inline;" onsubmit="return confirm('<?= t("Supprimer définitivement cette série ? Cela supprimera aussi les statistiques des patients associées à cette série.") ?>')">
                             <input type="hidden" name="serie_id" value="<?= $serie['id'] ?>">
                             <button type="submit" class="danger-btn">🗑 <?= t("Supprimer") ?></button>
                         </form>
