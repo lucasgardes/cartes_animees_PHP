@@ -14,6 +14,12 @@ $user = null;
 $patients = [];
 $title = "";
 
+function calculerAge($dateNaissance) {
+    $dob = new DateTime($dateNaissance);
+    $today = new DateTime();
+    return $dob->diff($today)->y;
+}
+
 if ($type === 'patient') {
     $stmt = $pdo->prepare("SELECT p.*, u.prenom AS ortho_prenom, u.nom AS ortho_nom
         FROM patients p
@@ -42,12 +48,6 @@ if ($type === 'patient') {
         WHERE up.user_id = ?");
     $stmt->execute([$id]);
     $patients = $stmt->fetchAll();
-
-    function calculerAge($dateNaissance) {
-        $dob = new DateTime($dateNaissance);
-        $today = new DateTime();
-        return $dob->diff($today)->y;
-    }
 }
 ?>
 <!DOCTYPE html>
