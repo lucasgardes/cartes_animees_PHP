@@ -26,6 +26,7 @@ if ($type === 'patient') {
     if (!$user) die("<div class='alert alert-danger'>Patient introuvable.</div>");
 
     $title = "Détails du patient";
+    $age = $user['date_naissance'] ? calculerAge($user['date_naissance']) : null;
 } else {
     $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ? AND role = 'ortho'");
     $stmt->execute([$id]);
@@ -41,6 +42,12 @@ if ($type === 'patient') {
         WHERE up.user_id = ?");
     $stmt->execute([$id]);
     $patients = $stmt->fetchAll();
+
+    function calculerAge($dateNaissance) {
+        $dob = new DateTime($dateNaissance);
+        $today = new DateTime();
+        return $dob->diff($today)->y;
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -59,7 +66,9 @@ if ($type === 'patient') {
     <div class="card">
         <?php if ($type === 'patient'): ?>
             <p><strong>👤 Nom :</strong> <?= htmlspecialchars($user['prenom'] . ' ' . $user['nom']) ?></p>
-            <p><strong>🎂 Âge :</strong> <?= htmlspecialchars($user['age']) ?> ans</p>
+            <p><strong>🎂 Âge :</strong>
+                <?= $age !== null ? htmlspecialchars($age) . ' ans' : 'Date de naissance inconnue' ?>
+            </p>
             <p><strong>🩺 Orthophoniste référent :</strong> <?= htmlspecialchars($user['ortho_prenom'] . ' ' . $user['ortho_nom']) ?></p>
         <?php else: ?>
             <p><strong>👤 Nom :</strong> <?= htmlspecialchars($user['prenom'] . ' ' . $user['nom']) ?></p>
