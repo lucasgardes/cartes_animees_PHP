@@ -1,0 +1,43 @@
+.container {
+            max-width: 800px;
+            margin: 2rem auto;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .card {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid #ddd;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .list-group {
+            list-style: none;
+            padding: 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        .list-group-item {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .list-group-item:last-child {
+            border-bottom: none;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: #0066cc;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #004c99;
+        }
